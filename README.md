@@ -6,6 +6,26 @@ Coding agents are powerful, but they often fail in predictable ways. MySuperPowe
 - **Superpowers**: A plugin-based skill system with hooks, multi-platform support, and process orchestration for agents.
 - **Matt Pocock Skills**: Engineering methodology skills honed on real-world TypeScript projects, covering TDD, debugging, issue management, and domain language.
 
+## 🎯 Where to Start? (Use Cases)
+
+Don't feel overwhelmed! You don't need to use all skills at once. Pick your scenario:
+
+**Scenario 1: "I'm learning and want to write code myself" (Manual-first)**
+Start with this minimal skill set:
+1. `grill-me`: Talk to the agent to figure out what you actually need to build.
+2. `tdd`: Ask the agent to guide you through writing tests *before* you write the code.
+3. `diagnose`: When your code breaks, use this to find the root cause step-by-step.
+4. `caveman`: Use this to force the agent to speak simply and save tokens.
+
+**Scenario 2: "I just want this feature done while I grab a coffee" (Auto-pilot)**
+Just say: *"Auto-pilot mode: Add user authentication."*
+The agent will automatically chain: `brainstorming` → `writing-plans` → `subagent-driven-development` → `tdd` → `code-review`.
+
+**Scenario 3: "I have a messy full-stack project, help me structure it"**
+1. Use `setup-project` to standardize your folder structure.
+2. Use `grill-with-docs` to generate a `CONTEXT.md` so the agent understands your codebase.
+3. Use `improve-codebase-architecture` to get actionable refactoring suggestions.
+
 ## Quickstart
 Install MySuperPowers in your project based on your agent:
 ### Claude Code
@@ -14,8 +34,31 @@ Install MySuperPowers in your project based on your agent:
 3. Copy `MySuperPowers/docs/using-superpowers.md` to your project's `docs/` folder.
 
 ### OpenCode
-1. Copy the `MySuperPowers/skills` folder to your project's `.config/opencode/skills/` directory.
-2. Copy `MySuperPowers/CLAUDE.md` to your project's root.
+
+OpenCode natively supports Claude Code's `CLAUDE.md` and `.claude/skills/` directory structures, making integration seamless.
+
+**Option A: Plugin Installation (Recommended)**
+Add the following to your project's `opencode.json` (or `opencode.jsonc`) file:
+
+```json
+{
+“plugins”: [
+“mysuperpowers@git+https://github.com/jemsemleezi/mysuperpowers.git”
+]
+}
+```
+
+*(Note: You can also use a local absolute/relative path if you cloned the repo).*
+
+**Option B: Manual Skill Copying**
+1. Copy the entire `skills/` directory into your project's root `.claude/skills/` folder (OpenCode will automatically detect skills here).
+2. Copy `CLAUDE.md` and `CONTEXT.md` to your project's root directory.
+
+**Verification:**
+Once installed, start OpenCode and use the `skill` tool to list available skills:
+- Run `list` to see all MySuperPowers skills.
+- Run `load mysuperpowers/tdd` (example) to activate a specific skill.
+
 
 ### Cursor / GitHub Copilot CLI
 1. Copy the `MySuperPowers/skills` folder to your project's `.cursor/skills/` (Cursor) or `.github/copilot/skills/` (Copilot) directory.
