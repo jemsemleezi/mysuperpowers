@@ -1,0 +1,7 @@
+{
+  "name": "mysuperpowers",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "Merged Superpowers + Matt Pocock Skills — a complete software development methodology for coding agents",
+  "keywords": ["skills", "coding-agent", "claude-code", "opencode", "development-workflow"]
+}

@@ -1,0 +1,12 @@
+{
+  "name": "mysuperpowers-dev",
+  "description": "Development marketplace for MySuperPowers — merged Superpowers + Matt Pocock Skills",
+  "plugins": [
+    {
+      "name": "mysuperpowers",
+      "description": "Complete development methodology for coding agents: brainstorming, planning, TDD, debugging, domain language, issue management, code review, and more",
+      "version": "1.0.0",
+      "source": "./"
+    }
+  ]
+}

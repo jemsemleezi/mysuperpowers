@@ -1,0 +1,28 @@
+{
+  "name": "mysuperpowers",
+  "skills": [
+    "./skills/engineering/brainstorming",
+    "./skills/engineering/writing-plans",
+    "./skills/engineering/executing-plans",
+    "./skills/engineering/subagent-driven-development",
+    "./skills/engineering/dispatching-parallel-agents",
+    "./skills/engineering/tdd",
+    "./skills/engineering/diagnose",
+    "./skills/engineering/grill-with-docs",
+    "./skills/engineering/zoom-out",
+    "./skills/engineering/to-prd",
+    "./skills/engineering/to-issues",
+    "./skills/engineering/triage",
+    "./skills/engineering/setup-project",
+    "./skills/engineering/prototype",
+    "./skills/engineering/verification-before-completion",
+    "./skills/engineering/improve-codebase-architecture",
+    "./skills/productivity/grill-me",
+    "./skills/productivity/caveman",
+    "./skills/productivity/writing-skills",
+    "./skills/productivity/receiving-code-review",
+    "./skills/productivity/requesting-code-review",
+    "./skills/productivity/finishing-a-development-branch",
+    "./skills/misc/using-git-worktrees"
+  ]
+}
