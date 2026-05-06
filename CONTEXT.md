@@ -25,6 +25,12 @@ _Avoid_: command, plugin, tool
 
 **Harness**: The IDE/CLI environment running the agent (Claude Code, Codex CLI, Cursor, OpenCode, Gemini CLI, GitHub Copilot CLI).
 
+**Auto-pilot Mode**: Fully automated mode triggered by "auto", "automate", "build this" or high-level requirements. The agent follows The Flow end-to-end without user intervention. See `docs/using-superpowers.md` for details.
+
+**Manual-first Mode**: Learning/control mode triggered by "I'll write it", "guide me", "help me learn". Agent acts as Senior Mentor — suggests skills, does NOT write code or spawn sub-agents unless explicitly asked. See `docs/using-superpowers.md` for details.
+
+**Safety Boundaries**: Irreversible-operation guardrails for autonomous mode — Branch Isolation (no writes to main/master), No Auto-Deploy, Destructive Operations require human confirmation, PR & Merges must pause for human review. See `docs/using-superpowers.md` for details.
+
 ## Relationships
 - A **Skill** belongs to one **Bucket**
 - **The Flow** consumes multiple **Skills** in sequence

@@ -19,7 +19,7 @@ Start with this minimal skill set:
 
 **Scenario 2: "I just want this feature done while I grab a coffee" (Auto-pilot)**
 Just say: *"Auto-pilot mode: Add user authentication."*
-The agent will automatically chain: `brainstorming` → `writing-plans` → `subagent-driven-development` → `tdd` → `code-review`.
+The agent will automatically chain: `brainstorming` → `writing-plans` → `subagent-driven-development` → `tdd` → `verification-before-completion` → `requesting-code-review`.
 
 **Scenario 3: "I have a messy full-stack project, help me structure it"**
 1. Use `setup-project` to standardize your folder structure.

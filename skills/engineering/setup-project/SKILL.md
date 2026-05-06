@@ -6,6 +6,24 @@ disable-model-invocation: true
 
 # Setup MySuperPowers
 
+> **⚠️ Directory Layout Enforcement:** When initializing full-stack projects, this skill MUST create projects following the standard layout defined in `docs/using-superpowers.md` (see "Full-Stack Project Conventions" section):
+> ```
+> my-project/
+> ├── .opencode/          # OpenCode specific configs
+> ├── docs/
+> │   └── adr/            # Architecture Decision Records
+> ├── src/
+> │   ├── frontend/       # Frontend code (React, Vue, etc.)
+> │   └── backend/        # Backend code (Node, Go, Python, etc.)
+> ├── tests/              # Global or integration tests
+> ├── scripts/            # Utility scripts
+> ├── CONTEXT.md          # Project domain language & context (Root level — REQUIRED)
+> ├── CLAUDE.md           # Agent rules (Root level)
+> └── package.json / go.mod  # Project manifests
+> ```
+> 
+> This layout ensures Auto-pilot mode can reliably locate key files (e.g., `CONTEXT.md` at root, `docs/adr/` for architecture decisions). **The root-level `CONTEXT.md` is mandatory** — downstream skills like `grill-with-docs`, `diagnose`, `tdd`, and `improve-codebase-architecture` depend on it.
+
 Scaffold the per-repo configuration that the MySuperPowers skills assume:
 
 - **Issue tracker** — where issues live (GitHub by default; local markdown is also supported out of the box)

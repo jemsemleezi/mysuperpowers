@@ -10,7 +10,7 @@ This framework is designed to support two distinct modes. You can switch between
 ### 🤖 Auto-pilot Mode (Fully Automated)
 Use this when you have a clear goal and want the agent to handle everything from design to implementation.
 - **Trigger phrases:** "Auto-pilot", "Fully automate this", "Help me build this feature".
-- **Behavior:** The agent strictly follows **The Flow** (brainstorming → writing-plans → executing-plans/subagent-driven-development → tdd → requesting-code-review → finishing-a-development-branch).
+- **Behavior:** The agent strictly follows **The Flow** (brainstorming → writing-plans → executing-plans/subagent-driven-development → tdd → verification-before-completion → requesting-code-review → finishing-a-development-branch).
 - **Best for:** Tedious tasks, boilerplate, well-defined features, or when you don't want to look at the code.
 
 ### 🧑‍💻 Manual-first Mode (Learning & Control)
@@ -55,6 +55,20 @@ Use `grill-with-docs` or `grill-me` first to clarify requirements.
 ### Domain Language and Documentation
 - `grill-with-docs`: Produces and updates `CONTEXT.md` (project domain language) and ADRs (Architecture Decision Records in `docs/adr/`).
 - `CONTEXT.md`: Shared terminology document to keep agents aligned on project-specific language.
+
+### Skill Selection Guide: grill-me vs grill-with-docs
+
+Both skills clarify requirements but differ in weight and scope. Choose based on your mode:
+
+| Criteria | `grill-me` (Productivity) | `grill-with-docs` (Engineering) |
+|----------|--------------------------|--------------------------------|
+| **Weight** | Lightweight — interview-style Q&A, no file side effects | Heavyweight — documents decisions to CONTEXT.md and ADRs |
+| **Output** | Shared understanding only | Living documentation (CONTEXT.md + ADR updates) |
+| **Best for** | Manual-first mode, quick alignment, stress-testing ideas | Auto-pilot mode, new projects, establishing domain language |
+| **When to use** | "Grill me on this idea" / "Let's talk through the design" | "Generate CONTEXT.md from my codebase" / "Document our architecture decisions" |
+| **Trigger** | Explicit mention or unclear requirements in manual mode | Auto-pilot initialization, large features, first-time project setup |
+
+**Rule of thumb:** In Manual-first mode, prefer `grill-me` (lighter). In Auto-pilot mode or when documentation needs updating, use `grill-with-docs` (more thorough).
 
 ### Engineering Practices
 - `test-driven-development` (TDD): Write tests first, use tracer bullet approach (vertical slices, not horizontal).

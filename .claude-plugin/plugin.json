@@ -1,5 +1,7 @@
 {
   "name": "mysuperpowers",
+  "version": "1.0.0",
+  "description": "Complete development methodology for AI coding agents — process orchestration + engineering skills. Fork of Superpowers by Obra + Matt Pocock Skills.",
   "skills": [
     "./skills/engineering/brainstorming",
     "./skills/engineering/writing-plans",
