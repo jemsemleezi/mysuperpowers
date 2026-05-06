@@ -31,7 +31,7 @@ Install MySuperPowers in your project based on your agent:
 ### Claude Code
 1. Copy the `MySuperPowers/skills` folder to your project's `.claude/skills/` directory.
 2. Copy `MySuperPowers/CLAUDE.md` to your project's root.
-3. Copy `MySuperPowers/docs/using-superpowers.md` to your project's `docs/` folder.
+3. (Optional) If you work offline often, you may copy `docs/using-superpowers.md` into your project’s `docs/` as a local reference.
 
 ### OpenCode
 
@@ -42,9 +42,9 @@ Add the following to your project's `opencode.json` (or `opencode.jsonc`) file:
 
 ```json
 {
-“plugins”: [
-“mysuperpowers@git+https://github.com/jemsemleezi/mysuperpowers.git”
-]
+  “plugin”: [
+  “mysuperpowers@git+https://github.com/jemsemleezi/mysuperpowers.git”
+  ]
 }
 ```
 
@@ -67,6 +67,7 @@ Once installed, start OpenCode and use the `skill` tool to list available skills
 ### Gemini CLI / Codex CLI
 1. Copy the `MySuperPowers/skills` folder to your project's `skills/` directory.
 2. Copy `MySuperPowers/CLAUDE.md` to your project's root.
+3. For Gemini CLI, the entrypoint rule file is `GEMINI.md` (configured in `gemini-extension.json`). Copy `MySuperPowers/GEMINI.md` to your project root if you want to customize Gemini-specific behavior.
 
 ## The 5 Failure Modes We Fix
 ### 1. The Agent Didn't Do What I Want

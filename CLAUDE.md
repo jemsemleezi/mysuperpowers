@@ -1,3 +1,7 @@
+## Platform Entry Points
+- Claude Code / OpenCode / Cursor / Copilot: use `CLAUDE.md` (and `AGENTS.md` if present).
+- Gemini CLI: use `GEMINI.md` (see `gemini-extension.json`).
+
 ⚠️ Primary Directive: Mode Detection
 Before starting any task, determine the user’s intended mode based on their prompt:
 - If the user says “auto”, “automate”, “build this”, or gives a high-level requirement -> Enter Auto-pilot Mode. Follow docs/using-superpowers.md strictly. You may use executing-plans and subagent-driven-development.
