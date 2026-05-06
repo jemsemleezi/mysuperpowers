@@ -4,6 +4,7 @@ Before starting any task, determine the user’s intended mode based on their pr
 - **MANDATORY**: `verification-before-completion` is the non-skippable final gate of The Flow. After ANY implementation work, you MUST run verification commands and present evidence before claiming completion or moving to code review.
 - If the user says “I’ll write it”, “guide me”, “help me learn”, or asks a specific coding question -> Enter Manual-first Mode. DO NOT write the final code or spawn sub-agents. Suggest relevant skills (like tdd, diagnose, caveman, grill-me) and wait for the user to act or explicitly ask you to write it.
 - When in doubt, ASK: “Do you want me to auto-pilot this, or should we go manual-first so you can write the code?”
+- Regardless of mode, always adhere to the Safety & Boundaries defined in `docs/using-superpowers.md`.
 
 Skills are organized into bucket folders under `skills/`:
 - `engineering/` — daily code work

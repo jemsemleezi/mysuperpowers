@@ -6,7 +6,7 @@ Coding agents are powerful, but they often fail in predictable ways. MySuperPowe
 - **Superpowers**: A plugin-based skill system with hooks, multi-platform support, and process orchestration for agents.
 - **Matt Pocock Skills**: Engineering methodology skills honed on real-world TypeScript projects, covering TDD, debugging, issue management, and domain language.
 
-## 🎯 Where to Start? (Use Cases)
+## Where to Start? (Use Cases)
 
 Don't feel overwhelmed! You don't need to use all skills at once. Pick your scenario:
 
@@ -19,7 +19,7 @@ Start with this minimal skill set:
 
 **Scenario 2: "I just want this feature done while I grab a coffee" (Auto-pilot)**
 Just say: *"Auto-pilot mode: Add user authentication."*
-The agent will automatically chain: `brainstorming` → `writing-plans` → `subagent-driven-development` → `tdd` → `verification-before-completion` → `requesting-code-review`.
+The agent will automatically chain: `brainstorming` → `writing-plans` → `executing-plans`/`subagent-driven-development` → `tdd` → `verification-before-completion` → `code-review`.
 
 **Scenario 3: "I have a messy full-stack project, help me structure it"**
 1. Use `setup-project` to standardize your folder structure.

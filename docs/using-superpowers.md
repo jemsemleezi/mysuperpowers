@@ -7,13 +7,15 @@ MySuperPowers is a complete software development methodology for your coding age
 
 This framework is designed to support two distinct modes. You can switch between them at any time based on your prompt.
 
-### 🤖 Auto-pilot Mode (Fully Automated)
+### Auto-pilot Mode (Fully Automated)
 Use this when you have a clear goal and want the agent to handle everything from design to implementation.
 - **Trigger phrases:** "Auto-pilot", "Fully automate this", "Help me build this feature".
-- **Behavior:** The agent strictly follows **The Flow** (brainstorming → writing-plans → executing-plans/subagent-driven-development → tdd → verification-before-completion → requesting-code-review → finishing-a-development-branch).
+- **Behavior:** The agent strictly follows **The Flow**:  
+  `brainstorming → writing-plans → executing-plans/subagent-driven-development → tdd → verification-before-completion → requesting-code-review → finishing-a-development-branch`.  
+  All steps are mandatory unless explicitly skipped by the user.
 - **Best for:** Tedious tasks, boilerplate, well-defined features, or when you don't want to look at the code.
 
-### 🧑‍💻 Manual-first Mode (Learning & Control)
+### Manual-first Mode (Learning & Control)
 Use this when you want to write the code yourself, learn, and maintain strict control over every line.
 - **Trigger phrases:** "Manual mode", "I want to write this myself", "Guide me step-by-step", "Let me drive".
 - **Behavior:** The agent acts as a Senior Mentor/Pair Programmer. It will **NOT** automatically execute plans, write code, or spawn sub-agents unless explicitly told to. It will only suggest skills (like `tdd`, `diagnose`, `caveman`, `grill-me`) for you to approve or execute manually.
@@ -26,6 +28,15 @@ To prevent autonomous agents from causing irreversible damage, the following bou
 2. **No Auto-Deploy:** Agents cannot execute deployment scripts, publish packages (npm, docker, etc.), or interact with production environments.
 3. **Destructive Operations:** Dropping databases, deleting cloud resources, or running `rm -rf` on non-local directories require explicit human confirmation.
 4. **PR & Merges:** Creating Pull Requests or merging branches MUST be paused for human review.
+
+## Skill Selection Guide: `grill-me` vs `grill-with-docs`
+
+| Skill | When to Use |
+|:---|:---|
+| `grill-me` | Manual-first mode, quick prototyping, personal learning projects, or when you want a lightweight interview without document changes. |
+| `grill-with-docs` | Auto-pilot mode, initial phase of new features, collaborative projects, or when you need to sync `CONTEXT.md` and ADRs. |
+
+If uncertain, manually ask the user which they prefer.
 
 ## Full-Stack Project Conventions (For `setup-project`)
 
@@ -47,28 +58,17 @@ my-project/
 ```
 
 ## What's Available
-### Core Implementation Flow
-The canonical workflow for building features:
-`brainstorming` → `writing-plans` → `executing-plans` → `verification-before-completion`
-Use `grill-with-docs` or `grill-me` first to clarify requirements.
+
+### Core Implementation Flow (The Flow)
+The canonical, unskippable implementation path in Auto-pilot mode is:
+```
+brainstorming → writing-plans → executing-plans/subagent-driven-development → tdd → verification-before-completion → requesting-code-review → finishing-a-development-branch
+```
+> ⚠️ **All flows MUST respect the Safety & Boundaries defined at the top of this document.**
 
 ### Domain Language and Documentation
 - `grill-with-docs`: Produces and updates `CONTEXT.md` (project domain language) and ADRs (Architecture Decision Records in `docs/adr/`).
 - `CONTEXT.md`: Shared terminology document to keep agents aligned on project-specific language.
-
-### Skill Selection Guide: grill-me vs grill-with-docs
-
-Both skills clarify requirements but differ in weight and scope. Choose based on your mode:
-
-| Criteria | `grill-me` (Productivity) | `grill-with-docs` (Engineering) |
-|----------|--------------------------|--------------------------------|
-| **Weight** | Lightweight — interview-style Q&A, no file side effects | Heavyweight — documents decisions to CONTEXT.md and ADRs |
-| **Output** | Shared understanding only | Living documentation (CONTEXT.md + ADR updates) |
-| **Best for** | Manual-first mode, quick alignment, stress-testing ideas | Auto-pilot mode, new projects, establishing domain language |
-| **When to use** | "Grill me on this idea" / "Let's talk through the design" | "Generate CONTEXT.md from my codebase" / "Document our architecture decisions" |
-| **Trigger** | Explicit mention or unclear requirements in manual mode | Auto-pilot initialization, large features, first-time project setup |
-
-**Rule of thumb:** In Manual-first mode, prefer `grill-me` (lighter). In Auto-pilot mode or when documentation needs updating, use `grill-with-docs` (more thorough).
 
 ### Engineering Practices
 - `test-driven-development` (TDD): Write tests first, use tracer bullet approach (vertical slices, not horizontal).

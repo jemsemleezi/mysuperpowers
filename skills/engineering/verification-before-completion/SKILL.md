@@ -4,6 +4,7 @@ description: Use when about to claim work is complete, fixed, or passing, before
 ---
 
 # Verification Before Completion
+> **Mandatory in Auto-pilot mode.** This skill is automatically triggered at the end of The Flow and must not be skipped unless the user explicitly overrides it.
 
 ## Overview
 
