@@ -1,14 +1,14 @@
-# ADR Format Template
+# ADR 格式模板
 
-Use with the grill-with-docs skill.
+配合 grill-with-docs 技能使用。
 
-# ADR Format
+# ADR 格式
 
-ADRs live in `docs/adr/` and use sequential numbering: `0001-slug.md`, `0002-slug.md`, etc.
+ADR 存放在 `docs/adr/` 目录下，使用顺序编号：`0001-slug.md`、`0002-slug.md` 等。
 
-Create the `docs/adr/` directory lazily — only when the first ADR is needed.
+`docs/adr/` 目录采用惰性创建 — 仅在需要第一份 ADR 时创建。
 
-## Template
+## 模板
 
 ```md
 # {Short title of the decision}
@@ -16,36 +16,36 @@ Create the `docs/adr/` directory lazily — only when the first ADR is needed.
 {1-3 sentences: what's the context, what did we decide, and why.}
 ```
 
-That's it. An ADR can be a single paragraph. The value is in recording *that* a decision was made and *why* — not in filling out sections.
+以上就是全部内容。ADR 可以仅为一个段落。其价值在于记录「做了什么决策」和「为什么做这个决策」，而非填满各个章节。
 
-## Optional sections
+## 可选章节
 
-Only include these when they add genuine value. Most ADRs won't need them.
+仅当这些章节能带来实际价值时才添加，大多数 ADR 不需要它们。
 
-- **Status** frontmatter (`proposed | accepted | deprecated | superseded by ADR-NNNN`) — useful when decisions are revisited
-- **Considered Options** — only when the rejected alternatives are worth remembering
-- **Consequences** — only when non-obvious downstream effects need to be called out
+- **状态** 前置元数据（`proposed | accepted | deprecated | superseded by ADR-NNNN`）— 当决策需要重新讨论时使用
+- **考虑过的选项** — 仅当被拒绝的替代方案值得记录时使用
+- **后果** — 仅当存在非显而易见的下游影响需要说明时使用
 
-## Numbering
+## 编号规则
 
-Scan `docs/adr/` for the highest existing number and increment by one.
+扫描 `docs/adr/` 目录中的现有编号，取最大值加一作为新 ADR 的编号。
 
-## When to offer an ADR
+## 何时建议编写 ADR
 
-All three of these must be true:
+必须同时满足以下三个条件：
 
-1. **Hard to reverse** — the cost of changing your mind later is meaningful
-2. **Surprising without context** — a future reader will look at the code and wonder "why on earth did they do it this way?"
-3. **The result of a real trade-off** — there were genuine alternatives and you picked one for specific reasons
+1. **难以逆转** — 后续改变主意的成本较高
+2. **无上下文时令人惊讶** — 未来的读者看到代码会疑惑「他们到底为什么这么做？」
+3. **真实权衡的结果** — 存在真正的替代方案，且你基于特定原因选择了其中一个
 
-If a decision is easy to reverse, skip it — you'll just reverse it. If it's not surprising, nobody will wonder why. If there was no real alternative, there's nothing to record beyond "we did the obvious thing."
+如果决策容易逆转，跳过即可 — 反正你之后会改。如果决策不令人惊讶，没人会疑惑原因。如果没有真正的替代方案，除了「我们做了显而易见的选择」之外没什么可记录的。
 
-### What qualifies
+### 符合要求的场景
 
-- **Architectural shape.** "We're using a monorepo." "The write model is event-sourced, the read model is projected into Postgres."
-- **Integration patterns between contexts.** "Ordering and Billing communicate via domain events, not synchronous HTTP."
-- **Technology choices that carry lock-in.** Database, message bus, auth provider, deployment target. Not every library — just the ones that would take a quarter to swap out.
-- **Boundary and scope decisions.** "Customer data is owned by the Customer context; other contexts reference it by ID only." The explicit no-s are as valuable as the yes-s.
-- **Deliberate deviations from the obvious path.** "We're using manual SQL instead of an ORM because X." Anything where a reasonable reader would assume the opposite. These stop the next engineer from "fixing" something that was deliberate.
-- **Constraints not visible in the code.** "We can't use AWS because of compliance requirements." "Response times must be under 200ms because of the partner API contract."
-- **Rejected alternatives when the rejection is non-obvious.** If you considered GraphQL and picked REST for subtle reasons, record it — otherwise someone will suggest GraphQL again in six months.
+- **架构形态**：「我们使用 monorepo。」「写模型采用事件溯源，读模型投影到 Postgres 中。」
+- **上下文间的集成模式**：「订单和计费通过领域事件通信，而非同步 HTTP 调用。」
+- **存在锁定效应的技术选型**：数据库、消息总线、认证提供商、部署目标。不是所有库 — 仅指那些替换需要耗时一个季度以上的组件。
+- **边界和范围决策**：「客户数据由客户上下文拥有，其他上下文仅通过 ID 引用。」明确拒绝的选项和接受的选项同样有价值。
+- **对常规路径的刻意偏离**：「我们因 X 原因使用手动 SQL 而非 ORM。」任何合理读者会假设相反情况的决策。这些记录能防止下一位工程师「修复」原本刻意为之的设计。
+- **代码中不可见的约束**：「因合规要求，我们无法使用 AWS。」「因合作伙伴 API 合同要求，响应时间必须低于 200ms。」
+- **拒绝替代方案的原因（非显而易见时）**：如果你考虑过 GraphQL 但因细微原因选择了 REST，请记录下来 — 否则六个月后还会有人提议改用 GraphQL。

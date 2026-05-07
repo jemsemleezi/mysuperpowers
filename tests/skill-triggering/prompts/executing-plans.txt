@@ -1,0 +1,1 @@
+I have an implementation plan at docs/plans/auth-plan.md. Can you execute this plan and implement all the tasks?

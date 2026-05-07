@@ -1,87 +1,87 @@
 ---
 name: to-issues
-description: Break a plan, spec, or PRD into independently-grabbable issues on the project issue tracker using tracer-bullet vertical slices. Use when user wants to convert a plan into issues, create implementation tickets, or break down work into issues.
+description: 使用示踪弹纵向切片，将计划、规格或 PRD 拆解为项目问题跟踪器上可独立抓取的问题。当用户希望将计划转换为问题、创建实现工单或将工作拆解为问题时使用。
 ---
 
-# To Issues
+# 转换为问题（To Issues）
 
-Break a plan into independently-grabbable issues using vertical slices (tracer bullets).
+使用纵向切片（示踪弹）将计划拆解为可独立抓取的问题。
 
-The issue tracker and triage label vocabulary should have been provided to you — run `/setup-project` if not.
+问题跟踪器和分类标签词汇应该已经提供给你——如果没有，运行 `/setup-project`。
 
-## Process
+## 流程
 
-### 1. Gather context
+### 1. 收集上下文
 
-Work from whatever is already in the conversation context. If the user passes an issue reference (issue number, URL, or path) as an argument, fetch it from the issue tracker and read its full body and comments.
+利用对话中已有的上下文。如果用户传递了问题引用（问题编号、URL 或路径）作为参数，从问题跟踪器中获取它并阅读其完整正文和评论。
 
-### 2. Explore the codebase (optional)
+### 2. 探索代码库（可选）
 
-If you have not already explored the codebase, do so to understand the current state of the code. Issue titles and descriptions should use the project's domain glossary vocabulary, and respect ADRs in the area you're touching.
+如果你尚未探索代码库，进行探索以了解代码的当前状态。问题标题和描述应使用项目的领域术语词汇，并尊重你所涉及区域的 ADR。
 
-### 3. Draft vertical slices
+### 3. 起草纵向切片
 
-Break the plan into **tracer bullet** issues. Each issue is a thin vertical slice that cuts through ALL integration layers end-to-end, NOT a horizontal slice of one layer.
+将计划拆解为 **示踪弹** 问题。每个问题都是一个薄的纵向切片，贯穿 **所有** 集成层的端到端，而非单一层的水平切片。
 
-Slices may be 'HITL' or 'AFK'. HITL slices require human interaction, such as an architectural decision or a design review. AFK slices can be implemented and merged without human interaction. Prefer AFK over HITL where possible.
+切片可以是 'HITL'（人在环中）或 'AFK'（离开键盘）。HITL 切片需要人类交互，例如架构决策或设计审查。AFK 切片可以在无需人类交互的情况下实现和合并。在可能的情况下优先选择 AFK。
 
 <vertical-slice-rules>
-- Each slice delivers a narrow but COMPLETE path through every layer (schema, API, UI, tests)
-- A completed slice is demoable or verifiable on its own
-- Prefer many thin slices over few thick ones
+- 每个切片都提供一条狭窄但 **完整** 的路径，贯穿每一层（schema、API、UI、测试）
+- 一个完成的切片可以独立演示或验证
+- 优先选择多个薄切片，而非少数厚切片
 </vertical-slice-rules>
 
-### 4. Quiz the user
+### 4. 向用户提问
 
-Present the proposed breakdown as a numbered list. For each slice, show:
+以编号列表形式呈现提议的拆解方案。对于每个切片，展示：
 
-- **Title**: short descriptive name
-- **Type**: HITL / AFK
-- **Blocked by**: which other slices (if any) must complete first
-- **User stories covered**: which user stories this addresses (if the source material has them)
+- **标题**：简短的描述性名称
+- **类型**：HITL / AFK
+- **被阻塞于**：哪些其他切片（如果有）必须先完成
+- **覆盖的用户故事**：这解决了哪些用户故事（如果源材料有的话）
 
-Ask the user:
+询问用户：
 
-- Does the granularity feel right? (too coarse / too fine)
-- Are the dependency relationships correct?
-- Should any slices be merged or split further?
-- Are the correct slices marked as HITL and AFK?
+- 粒度感觉合适吗？（太粗 / 太细）
+- 依赖关系是否正确？
+- 是否有任何切片应该合并或进一步拆分？
+- HITL 和 AFK 的标记是否正确？
 
-Iterate until the user approves the breakdown.
+迭代直到用户批准拆解方案。
 
-### 5. Publish the issues to the issue tracker
+### 5. 将问题发布到问题跟踪器
 
-For each approved slice, publish a new issue to the issue tracker. Use the issue body template below. These issues are considered ready for AFK agents, so publish them with the correct triage label unless instructed otherwise.
+对于每个已批准的切片，在问题跟踪器上发布一个新问题。使用以下问题正文模板。这些问题被视为已准备好供 AFK 代理处理，因此除非另有指示，否则使用正确的分类标签发布它们。
 
-Publish issues in dependency order (blockers first) so you can reference real issue identifiers in the "Blocked by" field.
+按依赖顺序发布问题（阻塞者优先），以便你可以在"被阻塞于"字段中引用真实的问题标识符。
 
 <issue-template>
-## Parent
+## 父级
 
-A reference to the parent issue on the issue tracker (if the source was an existing issue, otherwise omit this section).
+对问题跟踪器上父级问题的引用（如果源是现有问题，否则省略此部分）。
 
-## What to build
+## 要构建什么
 
-A concise description of this vertical slice. Describe the end-to-end behavior, not layer-by-layer implementation.
+此纵向切片的简洁描述。描述端到端行为，而非逐层实现。
 
-Avoid specific file paths or code snippets — they go stale fast. Exception: if a prototype produced a snippet that encodes a decision more precisely than prose can (state machine, reducer, schema, type shape), inline it here and note briefly that it came from a prototype. Trim to the decision-rich parts — not a working demo, just the important bits.
+避免具体的文件路径或代码片段——它们很快就会过时。例外情况：如果原型产出的代码片段比文字能更精确地编码某项决策（状态机、reducer、schema、类型形状），将其内联到这里，并简要注明它来自原型。裁剪到富含决策的部分——不是工作演示，只保留关键部分。
 
-## Acceptance criteria
+## 验收标准
 
-- [ ] Criterion 1
-- [ ] Criterion 2
-- [ ] Criterion 3
+- [ ] 标准 1
+- [ ] 标准 2
+- [ ] 标准 3
 
-## Blocked by
+## 被阻塞于
 
-- A reference to the blocking ticket (if any)
+- 对阻塞工单的引用（如果有）
 
-Or "None - can start immediately" if no blockers.
+或 "无 - 可立即开始"（如果没有阻塞）。
 
 </issue-template>
 
-Do NOT close or modify any parent issue.
+**不要**关闭或修改任何父级问题。
 
 ---
 
-*This skill originates from Matt Pocock Skills, adapted for MySuperPowers.*
+*本技能源自 Matt Pocock Skills，为 MySuperPowers 进行了适配。*

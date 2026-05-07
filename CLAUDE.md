@@ -1,21 +1,21 @@
-## Platform Entry Points
-- Claude Code / OpenCode / Cursor / Copilot: use `CLAUDE.md` (and `AGENTS.md` if present).
-- Gemini CLI: use `GEMINI.md` (see `gemini-extension.json`).
+## 平台入口
+- Claude Code / OpenCode / Cursor / Copilot: 使用 `CLAUDE.md`（如果存在 `AGENTS.md`，也一并使用）。
+- Gemini CLI: 使用 `GEMINI.md`（见 `gemini-extension.json`）。
 
-⚠️ Primary Directive: Mode Detection
-Before starting any task, determine the user’s intended mode based on their prompt:
-- If the user says “auto”, “automate”, “build this”, or gives a high-level requirement -> Enter Auto-pilot Mode. Follow docs/using-superpowers.md strictly. You may use executing-plans and subagent-driven-development.
-- **MANDATORY**: `verification-before-completion` is the non-skippable final gate of The Flow. After ANY implementation work, you MUST run verification commands and present evidence before claiming completion or moving to code review.
-- If the user says “I’ll write it”, “guide me”, “help me learn”, or asks a specific coding question -> Enter Manual-first Mode. DO NOT write the final code or spawn sub-agents. Suggest relevant skills (like tdd, diagnose, caveman, grill-me) and wait for the user to act or explicitly ask you to write it.
-- When in doubt, ASK: “Do you want me to auto-pilot this, or should we go manual-first so you can write the code?”
-- Regardless of mode, always adhere to the Safety & Boundaries defined in `docs/using-superpowers.md`.
+⚠️ 主要指令：模式检测
+在开始任何任务之前，先根据用户的提示判断其意图模式：
+- 如果用户说“auto”、“automate”、“build this”，或者给出高层需求 -> 进入 Auto-pilot Mode。严格遵循 `docs/using-superpowers.md`。你可以使用 `executing-plans` 和 `subagent-driven-development`。
+- **MANDATORY**：`verification-before-completion` 是 The Flow 不可跳过的最后一道关卡。任何实现工作完成后，你都必须运行验证命令并提供证据，然后才能宣称完成或进入代码审查。
+- 如果用户说“I’ll write it”、“guide me”、“help me learn”，或者询问具体的编码问题 -> 进入 Manual-first Mode。不要编写最终代码，也不要启动子代理。建议相关技能（如 `tdd`、`diagnose`、`caveman`、`grill-me`），并等待用户行动或明确要求你来写。
+- 如有疑问，请询问：“你是想让我全自动执行(Auto-pilot Mode)来做，还是我们切到 manual-first，让你自己写代码？”
+- 无论哪种模式，都要遵守 `docs/using-superpowers.md` 中定义的 Safety & Boundaries。
 
-Skills are organized into bucket folders under `skills/`:
-- `engineering/` — daily code work
-- `productivity/` — daily non-code workflow tools
-- `misc/` — kept around but rarely used
+`skills/` 下的技能按 bucket 文件夹组织：
+- `engineering/` — 日常编码工作
+- `productivity/` — 日常非编码工作流工具
+- `misc/` — 保留但很少使用
 
-Every skill in `engineering/` and `productivity/` must have a reference in the top-level `README.md` and an entry in `.claude-plugin/plugin.json`.
-Each bucket folder has a `README.md` that lists every skill in the bucket with a one-line description, with the skill name linked to its `SKILL.md`.
+`engineering/` 和 `productivity/` 中的每个技能都必须在顶层 `README.md` 中有引用，并在 `.claude-plugin/plugin.json` 中有条目。
+每个 bucket 文件夹都必须有一个 `README.md`，列出该 bucket 中的每个技能及其一句话描述，并将技能名称链接到对应的 `SKILL.md`。
 
-When working on this repo, load the relevant skill content before editing. Skills in `misc/` don't need README.md entries but should be in plugin.json if meant to be distributed.
+在处理这个仓库时，编辑前先加载相关技能内容。`misc/` 中的技能不需要写入 README.md，但如果打算分发，则应包含在 plugin.json 中。

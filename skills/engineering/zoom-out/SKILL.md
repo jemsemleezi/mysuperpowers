@@ -1,11 +1,11 @@
 ---
 name: zoom-out
-description: Tell the agent to zoom out and give broader context or a higher-level perspective. Use when you're unfamiliar with a section of code or need to understand how it fits into the bigger picture.
+description: 让代理拉高抽象层级，提供更广泛的上下文或更高层面的视角。当你不熟悉某段代码或需要理解它如何融入更大的图景时使用。
 disable-model-invocation: true
 ---
 
-I don't know this area of code well. Go up a layer of abstraction. Give me a map of all the relevant modules and callers, using the project's domain glossary vocabulary.
+我不太熟悉这块代码。拉高一层抽象。给我一张所有相关模块和调用者的地图，使用项目的领域术语词汇。
 
 ---
 
-*This skill originates from Matt Pocock Skills, adapted for MySuperPowers.*
+*本技能源自 Matt Pocock Skills，为 MySuperPowers 进行了适配。*

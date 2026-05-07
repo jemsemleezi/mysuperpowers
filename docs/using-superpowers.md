@@ -1,87 +1,87 @@
-# Using MySuperPowers
-MySuperPowers is a complete software development methodology for your coding agents. It merges two systems:
-- **Superpowers** by Obra: A plugin-based skill system for coding agents with process orchestration, hooks, and multi-platform support.
-- **Matt Pocock Skills**: Engineering methodology skills covering domain language, PRD/issue workflow, TDD, debugging, and more.
+# 使用 MySuperPowers
+MySuperPowers 是一套为你的 AI 编码代理准备的完整软件开发方法论。它融合了两大系统：
+- **Superpowers（作者 Obra）**：一个面向编码代理的、基于插件的技能系统，具备流程编排、钩子（hooks）和多平台支持能力。
+- **Matt Pocock Skills**：一套工程方法论技能，涵盖领域语言、PRD/问题工作流、TDD、调试等。
 
-## Modes of Use
+## 使用模式
 
-This framework is designed to support two distinct modes. You can switch between them at any time based on your prompt.
+本框架支持两种不同的使用模式。你可以随时通过提示语在它们之间自由切换。
 
-### Auto-pilot Mode (Fully Automated)
-Use this when you have a clear goal and want the agent to handle everything from design to implementation.
-- **Trigger phrases:** "Auto-pilot", "Fully automate this", "Help me build this feature".
-- **Behavior:** The agent strictly follows **The Flow**:  
-  `brainstorming → writing-plans → executing-plans/subagent-driven-development → tdd → verification-before-completion → requesting-code-review → finishing-a-development-branch`.  
-  All steps are mandatory unless explicitly skipped by the user.
-- **Best for:** Tedious tasks, boilerplate, well-defined features, or when you don't want to look at the code.
+### Auto-pilot 模式（全自动）
+当你有明确目标，希望代理从设计到实现一手包办时使用。
+- **触发短语：** "Auto-pilot"、"Fully automate this"、"Help me build this feature"。
+- **行为：** 代理将严格遵循 **The Flow**：  
+  `brainstorming → writing-plans → executing-plans/subagent-driven-development → tdd → verification-before-completion → requesting-code-review → finishing-a-development-branch`。  
+  除非用户明确跳过，否则所有步骤均不可省略。
+- **最适合：** 繁琐任务、模板代码、定义清晰的功能，或者你不想亲自看代码的场景。
 
-### Manual-first Mode (Learning & Control)
-Use this when you want to write the code yourself, learn, and maintain strict control over every line.
-- **Trigger phrases:** "Manual mode", "I want to write this myself", "Guide me step-by-step", "Let me drive".
-- **Behavior:** The agent acts as a Senior Mentor/Pair Programmer. It will **NOT** automatically execute plans, write code, or spawn sub-agents unless explicitly told to. It will only suggest skills (like `tdd`, `diagnose`, `caveman`, `grill-me`) for you to approve or execute manually.
-- **Best for:** Learning new concepts, tricky algorithms, or when you want to practice coding.
+### Manual-first 模式（学习与掌控）
+当你想自己写代码、学习新知，并对每一行代码保持严格控制时使用。
+- **触发短语：** "Manual mode"、"I want to write this myself"、"Guide me step-by-step"、"Let me drive"。
+- **行为：** 代理将扮演高级导师 / 结对编程角色。除非你明确指示，否则它 **不会** 自动执行计划、编写代码或创建子代理。它只会推荐技能（如 `tdd`、`diagnose`、`caveman`、`grill-me`）供你审批或手动执行。
+- **最适合：** 学习新概念、处理棘手算法，或者你想练习编码时。
 
-## Safety & Boundaries (Crucial for Auto-pilot)
+## 安全边界（Auto-pilot 模式的关键）
 
-To prevent autonomous agents from causing irreversible damage, the following boundaries are absolute:
-1. **Branch Isolation:** Sub-agents MUST ONLY read/write to the current working branch. They are strictly forbidden from checking out, modifying, or pushing to `main`/`master`/protected branches.
-2. **No Auto-Deploy:** Agents cannot execute deployment scripts, publish packages (npm, docker, etc.), or interact with production environments.
-3. **Destructive Operations:** Dropping databases, deleting cloud resources, or running `rm -rf` on non-local directories require explicit human confirmation.
-4. **PR & Merges:** Creating Pull Requests or merging branches MUST be paused for human review.
+为防止自主代理造成不可逆的损害，以下边界是绝对不可逾越的：
+1. **分支隔离：** 子代理 **只能** 在当前工作分支上读写。严禁检出、修改或推送至 `main` / `master` / 受保护分支。
+2. **禁止自动部署：** 代理不得执行部署脚本、发布包（npm、docker 等），或与生产环境进行交互。
+3. **破坏性操作：** 删除数据库、清除云资源，或在非本地目录上执行 `rm -rf` 等操作，必须经过人工明确确认。
+4. **PR 与合并：** 创建 Pull Request 或合并分支 **必须** 暂停以等待人工审查。
 
-## Skill Selection Guide: `grill-me` vs `grill-with-docs`
+## 技能选择指南：`grill-me` vs `grill-with-docs`
 
-| Skill | When to Use |
+| 技能 | 适用场景 |
 |:---|:---|
-| `grill-me` | Manual-first mode, quick prototyping, personal learning projects, or when you want a lightweight interview without document changes. |
-| `grill-with-docs` | Auto-pilot mode, initial phase of new features, collaborative projects, or when you need to sync `CONTEXT.md` and ADRs. |
+| `grill-me` | Manual-first 模式、快速原型验证、个人学习项目，或你只想进行一次轻量级访谈而不改动文档时。 |
+| `grill-with-docs` | Auto-pilot 模式、新功能启动阶段、团队协作项目，或需要同步 `CONTEXT.md` 和 ADR 时。 |
 
-If uncertain, manually ask the user which they prefer.
+如果不确定，请直接询问用户偏好。
 
-## Full-Stack Project Conventions (For `setup-project`)
+## 全栈项目约定（`setup-project` 适用）
 
-To ensure Auto-pilot mode works predictably across your full-stack projects, the `setup-project` skill enforces the following standard directory layout. `CONTEXT.md` should always be generated at the root.
+为确保 Auto-pilot 模式在全栈项目中表现一致，`setup-project` 技能会强制执行以下标准目录结构。`CONTEXT.md` 应始终生成在项目根目录。
 
 ```
 my-project/
-├── .opencode/ # OpenCode specific configs
+├── .opencode/          # OpenCode 专属配置
 ├── docs/
-│ └── adr/ # Architecture Decision Records
+│   └── adr/            # 架构决策记录（Architecture Decision Records）
 ├── src/
-│ ├── frontend/ # Frontend code (React, Vue, etc.)
-│ └── backend/ # Backend code (Node, Go, Python, etc.)
-├── tests/ # Global or integration tests
-├── scripts/ # Utility scripts
-├── CONTEXT.md # Project domain language & context (Root level)
-├── CLAUDE.md # Agent rules (Root level)
-└── package.json / go.mod # Project manifests
+│   ├── frontend/       # 前端代码（React、Vue 等）
+│   └── backend/        # 后端代码（Node、Go、Python 等）
+├── tests/              # 全局或集成测试
+├── scripts/            # 工具脚本
+├── CONTEXT.md          # 项目领域语言与上下文（根目录级）
+├── CLAUDE.md           # 代理规则（根目录级）
+└── package.json / go.mod  # 项目清单文件
 ```
 
-## What's Available
+## 可用技能概览
 
-### Core Implementation Flow (The Flow)
-The canonical, unskippable implementation path in Auto-pilot mode is:
+### 核心实现流程（The Flow）
+Auto-pilot 模式下规范的、不可跳过的实现路径为：
 ```
 brainstorming → writing-plans → executing-plans/subagent-driven-development → tdd → verification-before-completion → requesting-code-review → finishing-a-development-branch
 ```
-> ⚠️ **All flows MUST respect the Safety & Boundaries defined at the top of this document.**
+> ⚠️ **所有流程均须遵守本文档顶部定义的安全边界。**
 
-### Domain Language and Documentation
-- `grill-with-docs`: Produces and updates `CONTEXT.md` (project domain language) and ADRs (Architecture Decision Records in `docs/adr/`).
-- `CONTEXT.md`: Shared terminology document to keep agents aligned on project-specific language.
+### 领域语言与文档
+- `grill-with-docs`：产出并更新 `CONTEXT.md`（项目领域语言）和 ADR（位于 `docs/adr/` 的架构决策记录）。
+- `CONTEXT.md`：共享术语文档，用于保持代理对项目专属语言的对齐。
 
-### Engineering Practices
-- `test-driven-development` (TDD): Write tests first, use tracer bullet approach (vertical slices, not horizontal).
-- `systematic-debugging`: Structured debugging workflow before proposing fixes.
+### 工程实践
+- `test-driven-development`（TDD）：先写测试，采用示踪弹（tracer bullet）方式（纵向切片，而非横向分层）。
+- `systematic-debugging`：在提出修复方案之前，遵循结构化的调试流程。
 
-### Issue Management
-Pipeline for managing work:
+### 问题管理
+管理工作项的流水线：
 `to-prd` → `to-issues` → `triage`
-Integrates with GitHub Issues, GitLab Issues, or local markdown trackers.
+支持与 GitHub Issues、GitLab Issues 或本地 Markdown 跟踪器集成。
 
-### Code Quality
-- `receiving-code-review` / `requesting-code-review`: Handle code review feedback and request reviews before merging.
-- `verification-before-completion`: Run verification commands and confirm output before claiming work is done.
+### 代码质量
+- `receiving-code-review` / `requesting-code-review`：处理代码审查反馈，在合并前请求审查。
+- `verification-before-completion`：在宣称工作完成前，运行验证命令并确认输出结果。
 
-## Agent Instructions
-When a user asks to build something, the `brainstorming` skill should auto-trigger. Always use these skills when applicable. Even a 1% chance a skill matches your task means you should invoke it first.
+## 代理指令
+当用户要求构建某样东西时，`brainstorming` 技能应自动触发。始终在适用时使用这些技能。只要有 1% 的可能性某个技能与你的任务匹配，就应该先调用它。

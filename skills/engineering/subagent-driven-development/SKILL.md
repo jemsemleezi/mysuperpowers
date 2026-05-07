@@ -1,284 +1,283 @@
 ---
 name: subagent-driven-development
-description: Use when executing implementation plans with independent tasks in the current session
+description: 在当前会话中使用子代理执行包含独立任务的实现计划时使用
 ---
 
-# Subagent-Driven Development
+# 子代理驱动开发（Subagent-Driven Development）
 
-Execute plan by dispatching fresh subagent per task, with two-stage review after each: spec compliance review first, then code quality review.
+通过为每个任务分派全新的子代理来执行计划，每个任务后进行两阶段审查：先审查规格合规性，再审查代码质量。
 
-**Why subagents:** You delegate tasks to specialized agents with isolated context. By precisely crafting their instructions and context, you ensure they stay focused and succeed at their task. They should never inherit your session's context or history �?you construct exactly what they need. This also preserves your own context for coordination work.
+**为何使用子代理：** 你将任务委托给具有隔离上下文的专用代理。通过精确构建它们的指令和上下文，你确保它们保持专注并成功完成任务。它们绝不应该继承你会话的上下文或历史——你构建它们恰好需要的东西。这也为你自己的协调工作保留了上下文。
 
-**Core principle:** Fresh subagent per task + two-stage review (spec then quality) = high quality, fast iteration
+**核心原则：** 每个任务一个全新子代理 + 两阶段审查（先规格后质量）= 高质量，快速迭代
 
-**Continuous execution:** Do not pause to check in with your human partner between tasks. Execute all tasks from the plan without stopping. The only reasons to stop are: BLOCKED status you cannot resolve, ambiguity that genuinely prevents progress, or all tasks complete. "Should I continue?" prompts and progress summaries waste their time �?they asked you to execute the plan, so execute it.
+**持续执行：** 不要在任务之间暂停与你的用户伙伴确认。不间断地执行计划中的所有任务。唯一停止的理由是：你无法解决的 BLOCKED 状态、真正阻碍进展的歧义，或所有任务完成。"我应该继续吗？"的提示和进度摘要浪费他们的时间——他们要求你执行计划，所以执行它。
 
-## When to Use
+## 何时使用
 
 ```dot
 digraph when_to_use {
-    "Have implementation plan?" [shape=diamond];
-    "Tasks mostly independent?" [shape=diamond];
-    "Stay in this session?" [shape=diamond];
+    "有实现计划？" [shape=diamond];
+    "任务大多独立？" [shape=diamond];
+    "留在当前会话？" [shape=diamond];
     "subagent-driven-development" [shape=box];
     "executing-plans" [shape=box];
-    "Manual execution or brainstorm first" [shape=box];
+    "手动执行或先 brainstorm" [shape=box];
 
-    "Have implementation plan?" -> "Tasks mostly independent?" [label="yes"];
-    "Have implementation plan?" -> "Manual execution or brainstorm first" [label="no"];
-    "Tasks mostly independent?" -> "Stay in this session?" [label="yes"];
-    "Tasks mostly independent?" -> "Manual execution or brainstorm first" [label="no - tightly coupled"];
-    "Stay in this session?" -> "subagent-driven-development" [label="yes"];
-    "Stay in this session?" -> "executing-plans" [label="no - parallel session"];
+    "有实现计划？" -> "任务大多独立？" [label="是"];
+    "有实现计划？" -> "手动执行或先 brainstorm" [label="否"];
+    "任务大多独立？" -> "留在当前会话？" [label="是"];
+    "任务大多独立？" -> "手动执行或先 brainstorm" [label="否 - 紧耦合"];
+    "留在当前会话？" -> "subagent-driven-development" [label="是"];
+    "留在当前会话？" -> "executing-plans" [label="否 - 并行会话"];
 }
 ```
 
-**vs. Executing Plans (parallel session):**
-- Same session (no context switch)
-- Fresh subagent per task (no context pollution)
-- Two-stage review after each task: spec compliance first, then code quality
-- Faster iteration (no human-in-loop between tasks)
+**vs. 执行计划（并行会话）：**
+- 同一会话（无上下文切换）
+- 每个任务一个全新子代理（无上下文污染）
+- 每个任务后两阶段审查：先规格合规性，再代码质量
+- 更快迭代（任务之间无需人在环中）
 
-## The Process
+## 流程
 
 ```dot
 digraph process {
     rankdir=TB;
 
     subgraph cluster_per_task {
-        label="Per Task";
-        "Dispatch implementer subagent (./implementer-prompt.md)" [shape=box];
-        "Implementer subagent asks questions?" [shape=diamond];
-        "Answer questions, provide context" [shape=box];
-        "Implementer subagent implements, tests, commits, self-reviews" [shape=box];
-        "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" [shape=box];
-        "Spec reviewer subagent confirms code matches spec?" [shape=diamond];
-        "Implementer subagent fixes spec gaps" [shape=box];
-        "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [shape=box];
-        "Code quality reviewer subagent approves?" [shape=diamond];
-        "Implementer subagent fixes quality issues" [shape=box];
-        "Mark task complete in TodoWrite" [shape=box];
+        label="每个任务";
+        "分派实现者子代理（./implementer-prompt.md）" [shape=box];
+        "实现者子代理提问？" [shape=diamond];
+        "回答问题，提供上下文" [shape=box];
+        "实现者子代理实现、测试、提交、自我审查" [shape=box];
+        "分派规格审查者子代理（./spec-reviewer-prompt.md）" [shape=box];
+        "规格审查者子代理确认代码匹配规格？" [shape=diamond];
+        "实现者子代理修复规格缺口" [shape=box];
+        "分派代码质量审查者子代理（./code-quality-reviewer-prompt.md）" [shape=box];
+        "代码质量审查者子代理批准？" [shape=diamond];
+        "实现者子代理修复质量问题" [shape=box];
+        "在 TodoWrite 中标记任务完成" [shape=box];
     }
 
-    "Read plan, extract all tasks with full text, note context, create TodoWrite" [shape=box];
-    "More tasks remain?" [shape=diamond];
-    "Dispatch final code reviewer subagent for entire implementation" [shape=box];
-    "Use mysuperpowers:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
+    "阅读计划，提取所有任务的完整文本，注意上下文，创建 TodoWrite" [shape=box];
+    "还有剩余任务？" [shape=diamond];
+        "为整个实现分派最终代码审查者子代理" [shape=box];
+    "使用 mysuperpowers:finishing-a-development-branch" [shape=box style=filled fillcolor=lightgreen];
 
-    "Read plan, extract all tasks with full text, note context, create TodoWrite" -> "Dispatch implementer subagent (./implementer-prompt.md)";
-    "Dispatch implementer subagent (./implementer-prompt.md)" -> "Implementer subagent asks questions?";
-    "Implementer subagent asks questions?" -> "Answer questions, provide context" [label="yes"];
-    "Answer questions, provide context" -> "Dispatch implementer subagent (./implementer-prompt.md)";
-    "Implementer subagent asks questions?" -> "Implementer subagent implements, tests, commits, self-reviews" [label="no"];
-    "Implementer subagent implements, tests, commits, self-reviews" -> "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)";
-    "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" -> "Spec reviewer subagent confirms code matches spec?";
-    "Spec reviewer subagent confirms code matches spec?" -> "Implementer subagent fixes spec gaps" [label="no"];
-    "Implementer subagent fixes spec gaps" -> "Dispatch spec reviewer subagent (./spec-reviewer-prompt.md)" [label="re-review"];
-    "Spec reviewer subagent confirms code matches spec?" -> "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [label="yes"];
-    "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" -> "Code quality reviewer subagent approves?";
-    "Code quality reviewer subagent approves?" -> "Implementer subagent fixes quality issues" [label="no"];
-    "Implementer subagent fixes quality issues" -> "Dispatch code quality reviewer subagent (./code-quality-reviewer-prompt.md)" [label="re-review"];
-    "Code quality reviewer subagent approves?" -> "Mark task complete in TodoWrite" [label="yes"];
-    "Mark task complete in TodoWrite" -> "More tasks remain?";
-    "More tasks remain?" -> "Dispatch implementer subagent (./implementer-prompt.md)" [label="yes"];
-    "More tasks remain?" -> "Dispatch final code reviewer subagent for entire implementation" [label="no"];
-    "Dispatch final code reviewer subagent for entire implementation" -> "Use mysuperpowers:finishing-a-development-branch";
+    "阅读计划，提取所有任务的完整文本，注意上下文，创建 TodoWrite" -> "分派实现者子代理（./implementer-prompt.md）";
+    "分派实现者子代理（./implementer-prompt.md）" -> "实现者子代理提问？";
+    "实现者子代理提问？" -> "回答问题，提供上下文" [label="是"];
+    "回答问题，提供上下文" -> "分派实现者子代理（./implementer-prompt.md）";
+    "实现者子代理提问？" -> "实现者子代理实现、测试、提交、自我审查" [label="否"];
+    "实现者子代理实现、测试、提交、自我审查" -> "分派规格审查者子代理（./spec-reviewer-prompt.md）";
+    "分派规格审查者子代理（./spec-reviewer-prompt.md）" -> "规格审查者子代理确认代码匹配规格？";
+    "规格审查者子代理确认代码匹配规格？" -> "实现者子代理修复规格缺口" [label="否"];
+    "实现者子代理修复规格缺口" -> "分派规格审查者子代理（./spec-reviewer-prompt.md）" [label="重新审查"];
+    "规格审查者子代理确认代码匹配规格？" -> "分派代码质量审查者子代理（./code-quality-reviewer-prompt.md）" [label="是"];
+    "分派代码质量审查者子代理（./code-quality-reviewer-prompt.md）" -> "代码质量审查者子代理批准？";
+    "代码质量审查者子代理批准？" -> "实现者子代理修复质量问题" [label="否"];
+    "实现者子代理修复质量问题" -> "分派代码质量审查者子代理（./code-quality-reviewer-prompt.md）" [label="重新审查"];
+    "代码质量审查者子代理批准？" -> "在 TodoWrite 中标记任务完成" [label="是"];
+    "在 TodoWrite 中标记任务完成" -> "还有剩余任务？";
+    "还有剩余任务？" -> "分派实现者子代理（./implementer-prompt.md）" [label="是"];
+    "还有剩余任务？" -> "为整个实现分派最终代码审查者子代理" [label="否"];
+    "为整个实现分派最终代码审查者子代理" -> "使用 mysuperpowers:finishing-a-development-branch";
 }
 ```
 
-## Model Selection
+## 模型选择
 
-Use the least powerful model that can handle each role to conserve cost and increase speed.
+使用能处理每个角色的最弱模型以节省成本并提高速度。
 
-**Mechanical implementation tasks** (isolated functions, clear specs, 1-2 files): use a fast, cheap model. Most implementation tasks are mechanical when the plan is well-specified.
+**机械实现任务**（隔离函数、明确规格、1-2 个文件）：使用快速、便宜的模型。大多数实现任务在计划规格良好时是机械性的。
 
-**Integration and judgment tasks** (multi-file coordination, pattern matching, debugging): use a standard model.
+**集成和判断任务**（多文件协调、模式匹配、调试）：使用标准模型。
 
-**Architecture, design, and review tasks**: use the most capable available model.
+**架构、设计和审查任务**：使用最强大的可用模型。
 
-**Task complexity signals:**
-- Touches 1-2 files with a complete spec �?cheap model
-- Touches multiple files with integration concerns �?standard model
-- Requires design judgment or broad codebase understanding �?most capable model
+**任务复杂度信号：**
+- 触碰 1-2 个文件且有完整规格——便宜模型
+- 触碰多个文件且有集成问题——标准模型
+- 需要设计判断或广泛代码库理解——最强大的模型
 
-## Handling Implementer Status
+## 处理实现者状态
 
-Implementer subagents report one of four statuses. Handle each appropriately:
+实现者子代理报告四种状态之一。适当地处理每种：
 
-**DONE:** Proceed to spec compliance review.
+**DONE：** 进入规格合规性审查。
 
-**DONE_WITH_CONCERNS:** The implementer completed the work but flagged doubts. Read the concerns before proceeding. If the concerns are about correctness or scope, address them before review. If they're observations (e.g., "this file is getting large"), note them and proceed to review.
+**DONE_WITH_CONCERNS：** 实现者完成了工作但标记了疑虑。在继续之前阅读这些疑虑。如果疑虑涉及正确性或范围，在审查之前解决它们。如果它们是观察（例如"这个文件变得很大"），记录它们并进入审查。
 
-**NEEDS_CONTEXT:** The implementer needs information that wasn't provided. Provide the missing context and re-dispatch.
+**NEEDS_CONTEXT：** 实现者需要未提供的信息。提供缺失的上下文并重新分派。
 
-**BLOCKED:** The implementer cannot complete the task. Assess the blocker:
-1. If it's a context problem, provide more context and re-dispatch with the same model
-2. If the task requires more reasoning, re-dispatch with a more capable model
-3. If the task is too large, break it into smaller pieces
-4. If the plan itself is wrong, escalate to the human
+**BLOCKED：** 实现者无法完成任务。评估阻塞者：
+1. 如果是上下文问题，提供更多上下文并用相同模型重新分派
+2. 如果任务需要更多推理，用更强大的模型重新分派
+3. 如果任务太大，将其拆分为更小的部分
+4. 如果计划本身是错误的，升级给用户
 
-**Never** ignore an escalation or force the same model to retry without changes. If the implementer said it's stuck, something needs to change.
+**绝不** 忽略升级或强制相同模型在不变更的情况下重试。如果实现者说它卡住了，某件事需要改变。
 
-## Prompt Templates
+## 提示模板
 
-- `./implementer-prompt.md` - Dispatch implementer subagent
-- `./spec-reviewer-prompt.md` - Dispatch spec compliance reviewer subagent
-- `./code-quality-reviewer-prompt.md` - Dispatch code quality reviewer subagent
+- `./implementer-prompt.md` —— 分派实现者子代理
+- `./spec-reviewer-prompt.md` —— 分派规格合规性审查者子代理
+- `./code-quality-reviewer-prompt.md` —— 分派代码质量审查者子代理
 
-## Example Workflow
+## 示例工作流
 
 ```
-You: I'm using Subagent-Driven Development to execute this plan.
+You: 我正在使用 Subagent-Driven Development 来执行此计划。
 
-[Read plan file once: docs/plans/feature-plan.md]
-[Extract all 5 tasks with full text and context]
-[Create TodoWrite with all tasks]
+[阅读计划文件一次：docs/plans/feature_plan.md]
+[提取所有 5 个任务的完整文本和上下文]
+[用所有任务创建 TodoWrite]
 
-Task 1: Hook installation script
+任务 1：Hook 安装脚本
 
-[Get Task 1 text and context (already extracted)]
-[Dispatch implementation subagent with full task text + context]
+[获取任务 1 文本和上下文（已提取）]
+[用完整任务文本 + 上下文分派实现子代理]
 
-Implementer: "Before I begin - should the hook be installed at user or system level?"
+实现者："在开始之前——hook 应该安装在用户级还是系统级？"
 
-You: "User level (~/.config/mysuperpowers/hooks/)"
+You: "用户级（~/.config/mysuperpowers/hooks/）"
 
-Implementer: "Got it. Implementing now..."
-[Later] Implementer:
-  - Implemented install-hook command
-  - Added tests, 5/5 passing
-  - Self-review: Found I missed --force flag, added it
-  - Committed
+实现者："Got it. Implementing now..."
+[稍后] 实现者:
+  - 实现了 install-hook 命令
+  - 添加了测试，5/5 通过
+  - 自我审查：发现我遗漏了 --force 标志，添加了它
+  - 已提交
 
-[Dispatch spec compliance reviewer]
-Spec reviewer: �?Spec compliant - all requirements met, nothing extra
+[分派规格合规性审查者]
+规格审查者: ✅ 规格合规 - 所有需求满足，无多余
 
-[Get git SHAs, dispatch code quality reviewer]
-Code reviewer: Strengths: Good test coverage, clean. Issues: None. Approved.
+[获取 git SHAs，分派代码质量审查者]
+代码审查者: Strengths: Good test coverage, clean. Issues: None. Approved.
 
-[Mark Task 1 complete]
+[标记任务 1 完成]
 
-Task 2: Recovery modes
+任务 2：恢复模式
 
-[Get Task 2 text and context (already extracted)]
-[Dispatch implementation subagent with full task text + context]
+[获取任务 2 文本和上下文（已提取）]
+[用完整任务文本 + 上下文分派实现子代理]
 
-Implementer: [No questions, proceeds]
-Implementer:
-  - Added verify/repair modes
-  - 8/8 tests passing
-  - Self-review: All good
-  - Committed
+实现者: [无提问，继续进行]
+实现者:
+  - 添加了 verify/repair 模式
+  - 8/8 测试通过
+  - 自我审查: All good
+  - 已提交
 
-[Dispatch spec compliance reviewer]
-Spec reviewer: �?Issues:
-  - Missing: Progress reporting (spec says "report every 100 items")
-  - Extra: Added --json flag (not requested)
+[分派规格合规性审查者]
+规格审查者: ⚠️ Issues:
+  - 缺失：进度报告（规格说"每 100 项报告一次"）
+  - 多余：添加了 --json 标志（未请求）
 
-[Implementer fixes issues]
-Implementer: Removed --json flag, added progress reporting
+[实现者修复问题]
+实现者: Removed --json flag, added progress reporting
 
-[Spec reviewer reviews again]
-Spec reviewer: �?Spec compliant now
+[规格审查者再次审查]
+规格审查者: ✅ 现在规格合规
 
-[Dispatch code quality reviewer]
-Code reviewer: Strengths: Solid. Issues (Important): Magic number (100)
+[分派代码质量审查者]
+代码审查者: Strengths: Solid. Issues (Important): Magic number (100)
 
-[Implementer fixes]
-Implementer: Extracted PROGRESS_INTERVAL constant
+[实现者修复]
+实现者: Extracted PROGRESS_INTERVAL constant
 
-[Code reviewer reviews again]
-Code reviewer: �?Approved
+[代码审查者再次审查]
+代码审查者: ✅ Approved
 
-[Mark Task 2 complete]
+[标记任务 2 完成]
 
 ...
 
-[After all tasks]
-[Dispatch final code-reviewer]
-Final reviewer: All requirements met, ready to merge
+[所有任务完成后]
+[分派最终代码审查者]
+最终审查者: All requirements met, ready to merge
 
 Done!
 ```
 
-## Advantages
+## 优势
 
-**vs. Manual execution:**
-- Subagents follow TDD naturally
-- Fresh context per task (no confusion)
-- Parallel-safe (subagents don't interfere)
-- Subagent can ask questions (before AND during work)
+**vs. 手动执行：**
+- 子代理自然地遵循 TDD
+- 每个任务新鲜上下文（无混淆）
+- 并行安全（子代理不互相干扰）
+- 子代理可以提问（工作前和工作期间）
 
-**vs. Executing Plans:**
-- Same session (no handoff)
-- Continuous progress (no waiting)
-- Review checkpoints automatic
+**vs. 执行计划：**
+- 同一会话（无交接）
+- 持续进展（无需等待）
+- 自动审查检查点
 
-**Efficiency gains:**
-- No file reading overhead (controller provides full text)
-- Controller curates exactly what context is needed
-- Subagent gets complete information upfront
-- Questions surfaced before work begins (not after)
+**效率提升：**
+- 无文件读取开销（控制器提供完整文本）
+- 控制器精确策划所需上下文
+- 子代理 upfront 获得完整信息
+- 问题在工作开始前浮出水面（而非之后）
 
-**Quality gates:**
-- Self-review catches issues before handoff
-- Two-stage review: spec compliance, then code quality
-- Review loops ensure fixes actually work
-- Spec compliance prevents over/under-building
-- Code quality ensures implementation is well-built
+**质量关卡：**
+- 自我审查在交接前捕获问题
+- 两阶段审查：规格合规性，然后代码质量
+- 审查循环确保修复真正有效
+- 规格合规性防止过度 / 不足构建
+- 代码质量确保实现构建良好
 
-**Cost:**
-- More subagent invocations (implementer + 2 reviewers per task)
-- Controller does more prep work (extracting all tasks upfront)
-- Review loops add iterations
-- But catches issues early (cheaper than debugging later)
+**成本：**
+- 更多子代理调用（实现者 + 每个任务 2 个审查者）
+- 控制器做更多准备工作（提前提取所有任务）
+- 审查循环增加迭代
+- 但早期捕获问题（比以后调试更便宜）
 
-## Red Flags
+## 危险信号
 
-**Never:**
-- Start implementation on main/master branch without explicit user consent
-- Skip reviews (spec compliance OR code quality)
-- Proceed with unfixed issues
-- Dispatch multiple implementation subagents in parallel (conflicts)
-- Make subagent read plan file (provide full text instead)
-- Skip scene-setting context (subagent needs to understand where task fits)
-- Ignore subagent questions (answer before letting them proceed)
-- Accept "close enough" on spec compliance (spec reviewer found issues = not done)
-- Skip review loops (reviewer found issues = implementer fixes = review again)
-- Let implementer self-review replace actual review (both are needed)
-- **Start code quality review before spec compliance is �?* (wrong order)
-- Move to next task while either review has open issues
+**绝不：**
+- 未经用户明确同意在 main/master 分支上开始实现
+- 跳过审查（规格合规性或代码质量）
+- 带着未修复的问题继续
+- 并行分派多个实现子代理（冲突）
+- 让子代理读取计划文件（提供完整文本代替）
+- 跳过场景设定上下文（子代理需要理解任务在整体中的位置）
+- 忽略子代理的问题（在让他们继续之前回答）
+- 在规格合规性上接受"差不多"（规格审查者发现问题 = 未完成）
+- 跳过审查循环（审查者发现问题 = 实现者修复 = 审查者再次审查）
+- 让实现者自我审查替代实际审查（两者都需要）
+- **在规格合规性完成 **之前** 开始代码质量审查**（顺序错误）
+- 在任一审查有未决问题时移动到下一个任务
 
-**If subagent asks questions:**
-- Answer clearly and completely
-- Provide additional context if needed
-- Don't rush them into implementation
+**如果子代理提问：**
+- 清晰完整地回答
+- 如果需要，提供额外上下文
+- 不要催促它们进入实现
 
-**If reviewer finds issues:**
-- Implementer (same subagent) fixes them
-- Reviewer reviews again
-- Repeat until approved
-- Don't skip the re-review
+**如果审查者发现问题：**
+- 实现者（同一个子代理）修复它们
+- 审查者再次审查
+- 重复直到批准
+- 不要跳过重新审查
 
-**If subagent fails task:**
-- Dispatch fix subagent with specific instructions
-- Don't try to fix manually (context pollution)
+**如果子代理任务失败：**
+- 分派修复子代理，附带具体指令
+- 不要手动修复（上下文污染）
 
-## Integration
+## 集成
 
-**Required workflow skills:**
-- **mysuperpowers:using-git-worktrees** - Ensures isolated workspace (creates one or verifies existing)
-- **mysuperpowers:writing-plans** - Creates the plan this skill executes
-- **mysuperpowers:requesting-code-review** - Code review template for reviewer subagents
-- **mysuperpowers:finishing-a-development-branch** - Complete development after all tasks
+**必需工作流技能：**
+- **mysuperpowers:using-git-worktrees** —— 确保隔离的工作区（创建一个或验证已有的）
+- **mysuperpowers:writing-plans** —— 创建此技能执行的计划
+- **mysuperpowers:requesting-code-review** —— 用于审查者子代理的代码审查模板
+- **mysuperpowers:finishing-a-development-branch** —— 所有任务完成后完成开发
 
-**Subagents should use:**
-- **mysuperpowers:tdd** - Subagents follow TDD for each task
+**子代理应使用：**
+- **mysuperpowers:tdd** —— 子代理对每个任务遵循 TDD
 
-**Alternative workflow:**
-- **mysuperpowers:executing-plans** - Use for parallel session instead of same-session execution
+**替代工作流：**
+- **mysuperpowers:executing-plans** —— 用于并行会话而非同会话执行
 
 ---
 
-*Originates from Superpowers by Obra, adapted for MySuperPowers.*
-
+*本技能源自 Obra 的 Superpowers，为 MySuperPowers 进行了适配。*

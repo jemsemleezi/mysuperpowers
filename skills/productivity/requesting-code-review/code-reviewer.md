@@ -1,8 +1,8 @@
-# Code Reviewer Prompt Template
+# 代码审查员提示词模板
 
-Use this template when dispatching a code reviewer subagent.
+分派代码审查员子代理时，请使用此模板。
 
-**Purpose:** Review completed work against requirements and code quality standards before it cascades into more work.
+**用途：** 在已完成的工作引发后续连锁修改前，对照需求和代码质量标准进行审查。
 
 ```
 Task tool (general-purpose):
@@ -121,15 +121,15 @@ Task tool (general-purpose):
     - Avoid giving a clear verdict
 ```
 
-**Placeholders:**
-- `{DESCRIPTION}` — brief summary of what was built
-- `{PLAN_OR_REQUIREMENTS}` — what it should do (plan file path, task text, or requirements)
-- `{BASE_SHA}` — starting commit
-- `{HEAD_SHA}` — ending commit
+**占位符说明：**
+- `{DESCRIPTION}` — 已构建内容的简要说明
+- `{PLAN_OR_REQUIREMENTS}` — 预期功能说明（计划文件路径、任务文本或需求文档）
+- `{BASE_SHA}` — 起始提交哈希
+- `{HEAD_SHA}` — 结束提交哈希
 
-**Reviewer returns:** Strengths, Issues (Critical / Important / Minor), Recommendations, Assessment
+**审查员返回内容：** 优点、问题（严重/重要/次要）、改进建议、评估结论
 
-## Example Output
+## 输出示例
 
 ```
 ### Strengths
@@ -169,4 +169,4 @@ Task tool (general-purpose):
 
 ---
 
-*Originates from Superpowers by Obra, adapted for MySuperPowers.*
+*本技能源自 Obra 的 Superpowers，已适配 MySuperPowers。*

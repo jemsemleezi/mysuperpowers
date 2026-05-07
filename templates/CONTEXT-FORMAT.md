@@ -1,10 +1,10 @@
-# CONTEXT.md Format Template
+# CONTEXT.md 格式模板
 
-Use with the grill-with-docs skill.
+配合 grill-with-docs 技能使用。
 
-# CONTEXT.md Format
+# CONTEXT.md 格式
 
-## Structure
+## 结构
 
 ```md
 # {Context Name}
@@ -14,7 +14,7 @@ Use with the grill-with-docs skill.
 ## Language
 
 **Order**:
-{A concise description of the term}
+A request from a customer to purchase goods or services.
 _Avoid_: Purchase, transaction
 
 **Invoice**:
@@ -40,21 +40,21 @@ _Avoid_: Client, buyer, account
 - "account" was used to mean both **Customer** and **User** — resolved: these are distinct concepts.
 ```
 
-## Rules
+## 规则
 
-- **Be opinionated.** When multiple words exist for the same concept, pick the best one and list the others as aliases to avoid.
-- **Flag conflicts explicitly.** If a term is used ambiguously, call it out in "Flagged ambiguities" with a clear resolution.
-- **Keep definitions tight.** One sentence max. Define what it IS, not what it does.
-- **Show relationships.** Use bold term names and express cardinality where obvious.
-- **Only include terms specific to this project's context.** General programming concepts (timeouts, error types, utility patterns) don't belong even if the project uses them extensively. Before adding a term, ask: is this a concept unique to this context, or a general programming concept? Only the former belongs.
-- **Group terms under subheadings** when natural clusters emerge. If all terms belong to a single cohesive area, a flat list is fine.
-- **Write an example dialogue.** A conversation between a dev and a domain expert that demonstrates how the terms interact naturally and clarifies boundaries between related concepts.
+- **观点明确。** 当同一概念有多个表述时，选择最合适的那个，将其余表述列为需避免的别名。
+- **明确标记冲突。** 如果某个术语存在歧义，在「标记歧义」部分明确指出并给出明确解决方案。
+- **定义简洁。** 最多一句话。定义它是什么，而非它做什么。
+- **展示关联关系。** 使用加粗的术语名称，在显而易见的地方说明基数关系。
+- **仅收录项目专属术语。** 通用编程概念（如超时、错误类型、工具函数模式）即使项目广泛使用也不应纳入。添加术语前请先确认：这是该上下文独有的概念，还是通用编程概念？仅前者符合要求。
+- **按子标题分组术语** 当术语自然形成集群时，按子标题分组。如果所有术语都属于同一完整领域，使用平铺列表即可。
+- **编写示例对话。** 一段开发者与领域专家之间的对话，展示术语如何自然交互，并厘清相关概念的边界。
 
-## Single vs multi-context repos
+## 单上下文与多上下文仓库
 
-**Single context (most repos):** One `CONTEXT.md` at the repo root.
+**单上下文（大多数仓库）：** 仓库根目录下仅保留一份 `CONTEXT.md`。
 
-**Multiple contexts:** A `CONTEXT-MAP.md` at the repo root lists the contexts, where they live, and how they relate to each other:
+**多上下文：** 仓库根目录下的 `CONTEXT-MAP.md` 列出所有上下文、其存放位置及相互关系：
 
 ```md
 # Context Map
@@ -72,10 +72,10 @@ _Avoid_: Client, buyer, account
 - **Ordering ↔ Billing**: Shared types for `CustomerId` and `Money`
 ```
 
-The skill infers which structure applies:
+技能会自动推断适用的结构：
 
-- If `CONTEXT-MAP.md` exists, read it to find contexts
-- If only a root `CONTEXT.md` exists, single context
-- If neither exists, create a root `CONTEXT.md` lazily when the first term is resolved
+- 若存在 `CONTEXT-MAP.md`，读取该文件以查找所有上下文
+- 若仅存在根目录 `CONTEXT.md`，则为单上下文
+- 若两者都不存在，在解析首个术语时惰性创建根目录 `CONTEXT.md`
 
-When multiple contexts exist, infer which one the current topic relates to. If unclear, ask.
+当存在多个上下文时，推断当前主题属于哪个上下文。若不明确，请询问用户。

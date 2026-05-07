@@ -1,9 +1,9 @@
-# Productivity Skills
-Daily non-code workflow tools for AI coding agents.
+# 生产力类技能（Productivity Skills）
+AI 编码代理的日常非编码工作流工具。
 
-- [grill-me](grill-me/SKILL.md): Quick requirements clarification session with the user.
-- [caveman](caveman/SKILL.md): Compressed, low-verbosity communication style for agents.
-- [writing-skills](writing-skills/SKILL.md): Guides creating, editing, and verifying skills.
-- [receiving-code-review](receiving-code-review/SKILL.md): Handles code review feedback with technical rigor.
-- [requesting-code-review](requesting-code-review/SKILL.md): Requests code reviews before merging or completing work.
-- [finishing-a-development-branch](finishing-a-development-branch/SKILL.md): Guides integration of completed development branches.
+- [grill-me](grill-me/SKILL.md)：与用户进行快速需求澄清会话。
+- [caveman](caveman/SKILL.md)：面向代理的压缩式、低冗余沟通风格。
+- [writing-skills](writing-skills/SKILL.md)：指导如何创建、编辑和验证技能。
+- [receiving-code-review](receiving-code-review/SKILL.md)：以技术严谨性处理代码审查反馈。
+- [requesting-code-review](requesting-code-review/SKILL.md)：在合并或完成工作前请求代码审查。
+- [finishing-a-development-branch](finishing-a-development-branch/SKILL.md)：指导已完成开发分支的整合。

@@ -1,329 +1,329 @@
 ---
 name: diagnose
-description: Disciplined debugging diagnosis loop. Use when encountering bugs, test failures, unexpected behavior, or performance regressions - before proposing fixes.
+description: 纪律化的调试诊断循环。在遇到 Bug、测试失败、意外行为或性能回归时使用——在提出修复方案之前。
 ---
 
-# Diagnose
+# 诊断（Diagnose）
 
-> Merged from Superpowers (Obra) and Matt Pocock Skills.
+> 合并自 Superpowers（Obra）和 Matt Pocock Skills。
 
-## Overview
+## 概述
 
-Random fixes waste time and create new bugs. Quick patches mask underlying issues.
+随机修复浪费时间并创建新 Bug。快速补丁掩盖底层问题。
 
-**Core principle:** ALWAYS find root cause before attempting fixes. Symptom fixes are failure.
+**核心原则：** 始终在尝试修复之前找到根因。症状修复就是失败。
 
-**Violating the letter of this process is violating the spirit of debugging.**
+**违反此流程的字面就是违反调试的精神。**
 
-## The Iron Law
+## 铁律
 
 ```
-NO FIXES WITHOUT ROOT CAUSE INVESTIGATION FIRST
+没有根因调查，不提出修复
 ```
 
-If you haven't completed root cause analysis, you cannot propose fixes.
+如果你没有完成根因分析，你就不能提出修复方案。
 
-## When to Use
+## 何时使用
 
-Use for ANY technical issue:
-- Test failures
-- Bugs in production
-- Unexpected behavior
-- Performance problems
-- Build failures
-- Integration issues
+用于 **任何** 技术问题：
+- 测试失败
+- 生产环境 Bug
+- 意外行为
+- 性能问题
+- 构建失败
+- 集成问题
 
-**Use this ESPECIALLY when:**
-- Under time pressure (emergencies make guessing tempting)
-- "Just one quick fix" seems obvious
-- You've already tried multiple fixes
-- Previous fix didn't work
-- You don't fully understand the issue
+**尤其在这些情况下使用：**
+- 时间紧迫（紧急情况让猜测变得诱人）
+- "一个快速修复"看起来显而易见
+- 你已经尝试了多次修复
+- 之前的修复没有生效
+- 你没有完全理解问题
 
-**Don't skip when:**
-- Issue seems simple (simple bugs have root causes too)
-- You're in a hurry (rushing guarantees rework)
-- Manager wants it fixed NOW (systematic is faster than thrashing)
+**不要跳过的情况：**
+- 问题看起来简单（简单 Bug 也有根因）
+- 你在赶时间（匆忙保证返工）
+- 经理要求立即修复（系统方法比乱试更快）
 
-## The Phases
+## 各阶段
 
-Complete each phase before proceeding to the next.
+在进入下一阶段之前完成每个阶段。
 
-### Phase 0: Build a Feedback Loop
+### 阶段 0：构建反馈循环
 
-**This is the skill.** Everything else is mechanical. If you have a fast, deterministic, agent-runnable pass/fail signal for the bug, you will find the cause — bisection, hypothesis-testing, and instrumentation all just consume that signal. If you don't have one, no amount of staring at code will save you.
+**这才是技能的核心。** 其他一切都是机械性的。如果你有一个快速、确定性的、代理可运行的通过 / 失败信号来定位 Bug，你会找到原因——二分法、假设测试和插桩都只是消费这个信号。如果你没有，再怎么看代码也救不了你。
 
-Spend disproportionate effort here. **Be aggressive. Be creative. Refuse to give up.**
+在此投入不成比例的努力。**要激进。要有创意。绝不放弃。**
 
-#### Ways to Construct a Loop
+#### 构建循环的方式
 
-Try in roughly this order:
+按大致此顺序尝试：
 
-1. **Failing test** at whatever seam reaches the bug — unit, integration, e2e.
-2. **Curl / HTTP script** against a running dev server.
-3. **CLI invocation** with a fixture input, diffing stdout against a known-good snapshot.
-4. **Headless browser script** (Playwright / Puppeteer) — drives the UI, asserts on DOM/console/network.
-5. **Replay a captured trace.** Save a real network request / payload / event log to disk; replay it through the code path in isolation.
-6. **Throwaway harness.** Spin up a minimal subset of the system (one service, mocked deps) that exercises the bug code path with a single function call.
-7. **Property / fuzz loop.** If the bug is "sometimes wrong output", run 1000 random inputs and look for the failure mode.
-8. **Bisection harness.** If the bug appeared between two known states (commit, dataset, version), automate "boot at state X, check, repeat" so you can `git bisect run` it.
-9. **Differential loop.** Run the same input through old-version vs new-version (or two configs) and diff outputs.
-10. **HITL bash script.** Last resort. If a human must click, drive _them_ with a structured loop script so the loop is still repeatable. Captured output feeds back to you.
+1. **失败的测试** 在能触及 Bug 的任何缝隙处——单元、集成、e2e。
+2. **Curl / HTTP 脚本** 针对运行中的开发服务器。
+3. **CLI 调用** 带固定输入，将 stdout 与已知良好的快照进行 diff。
+4. **无头浏览器脚本**（Playwright / Puppeteer）—— 驱动 UI，断言 DOM / console / network。
+5. **重放捕获的 trace。** 将真实网络请求 / 负载 / 事件日志保存到磁盘；在隔离中通过代码路径重放它。
+6. **一次性 harness。** 启动系统的最小化子集（一个服务，mock 依赖），用单个函数调用练习 Bug 代码路径。
+7. **属性 / fuzz 循环。** 如果 Bug 是"有时输出错误"，运行 1000 个随机输入并寻找失败模式。
+8. **二分法 harness。** 如果 Bug 出现在两个已知状态之间（提交、数据集、版本），自动化"在状态 X 启动，检查，重复"以便你可以 `git bisect run`。
+9. **差异循环。** 将相同输入通过旧版本 vs 新版本（或两个配置）运行并 diff 输出。
+10. **HITL bash 脚本。** 最后手段。如果必须有人点击，用结构化循环脚本驱动 *他们*，以便循环仍然可重复。捕获的输出反馈给你。
 
-Build the right feedback loop, and the bug is 90% fixed.
+构建正确的反馈循环，Bug 就已经 90% 修复了。
 
-#### Iterate on the Loop Itself
+#### 迭代循环本身
 
-Treat the loop as a product. Once you have _a_ loop, ask:
-- Can I make it faster? (Cache setup, skip unrelated init, narrow the test scope.)
-- Can I make the signal sharper? (Assert on the specific symptom, not "didn't crash".)
-- Can I make it more deterministic? (Pin time, seed RNG, isolate filesystem, freeze network.)
+将循环视为产品。一旦你有了 _一个_ 循环，问：
+- 我能让它更快吗？（缓存设置、跳过无关初始化、缩小测试范围。）
+- 我能让信号更锐利吗？（断言具体症状，而非"没有崩溃"。）
+- 我能让它更确定吗？（固定时间、种子 RNG、隔离文件系统、冻结网络。）
 
-A 30-second flaky loop is barely better than no loop. A 2-second deterministic loop is a debugging superpower.
+一个 30 秒的不稳定循环几乎和不循环一样差。一个 2 秒的确定性循环是调试超能力。
 
-#### Non-Deterministic Bugs
+#### 非确定性 Bug
 
-The goal is not a clean repro but a **higher reproduction rate**. Loop the trigger 100×, parallelise, add stress, narrow timing windows, inject sleeps. A 50%-flake bug is debuggable; 1% is not — keep raising the rate until it's debuggable.
+目标不是干净的复现，而是 **更高的复现率**。将触发器循环 100 次，并行化，增加压力，缩小时间窗口，注入 sleep。50% 偶现的 Bug 是可调试的；1% 则不行——持续提高比率直到可调试。
 
-#### When You Genuinely Cannot Build a Loop
+#### 当你确实无法构建循环时
 
-Stop and say so explicitly. List what you tried. Ask the user for: (a) access to whatever environment reproduces it, (b) a captured artifact (HAR file, log dump, core dump, screen recording with timestamps), or (c) permission to add temporary production instrumentation. Do **not** proceed to hypothesise without a loop.
+停下来并明确说出来。列出你尝试过的东西。向用户请求：（a）访问复现它的环境，（b）捕获的工件（HAR 文件、日志转储、core dump、带时间戳的屏幕录像），或（c）添加临时生产仪表的权限。没有循环 **不要** 进入假设阶段。
 
-Do not proceed to Phase 1 until you have a loop you believe in.
+在拥有你相信的循环之前不要进入阶段 1。
 
-### Phase 1: Root Cause Investigation
+### 阶段 1：根因调查
 
-**BEFORE attempting ANY fix:**
+**在尝试任何修复之前：**
 
-1. **Reproduce Consistently**
-   - Run your Phase 0 loop. Watch the bug appear.
-   - Can you trigger it reliably? What are the exact steps?
-   - Does it happen every time?
-   - If not reproducible → gather more data, don't guess
-   - [ ] The loop produces the failure mode the **user** described — not a different failure that happens to be nearby. Wrong bug = wrong fix.
-   - [ ] You have captured the exact symptom (error message, wrong output, slow timing) so later phases can verify the fix actually addresses it.
+1. **一致复现**
+   - 运行你的阶段 0 循环。看着 Bug 出现。
+   - 你能可靠地触发它吗？确切步骤是什么？
+   - 它每次都发生吗？
+   - 如果不可复现 → 收集更多数据，不要猜测
+   - [ ] 循环产生 **用户** 描述的失败模式——而非附近的不同失败。错误的 Bug = 错误的修复。
+   - [ ] 你捕获了确切的症状（错误信息、错误输出、慢速时序），以便后续阶段可以验证修复真正解决了它。
 
-2. **Read Error Messages Carefully**
-   - Don't skip past errors or warnings
-   - They often contain the exact solution
-   - Read stack traces completely
-   - Note line numbers, file paths, error codes
+2. **仔细阅读错误信息**
+   - 不要跳过错误或警告
+   - 它们通常包含确切的解决方案
+   - 完整阅读堆栈跟踪
+   - 注意行号、文件路径、错误代码
 
-3. **Check Recent Changes**
-   - What changed that could cause this?
-   - Git diff, recent commits
-   - New dependencies, config changes
-   - Environmental differences
+3. **检查近期变更**
+   - 什么变更可能导致这个？
+   - Git diff、近期提交
+   - 新依赖、配置变更
+   - 环境差异
 
-4. **Gather Evidence in Multi-Component Systems**
-   - For each component boundary, log what data enters and exits
-   - Verify environment/config propagation
-   - Check state at each layer
-   - Run once to gather evidence showing WHERE it breaks
-   - THEN analyze evidence to identify failing component
+4. **在多组件系统中收集证据**
+   - 对每个组件边界，记录数据进入和离开的内容
+   - 验证环境 / 配置的传播
+   - 检查每层的状态
+   - 运行一次以收集证据，显示 **哪里** 坏了
+   - 然后分析证据以识别失败的组件
 
-5. **Trace Data Flow**
-   - Where does bad value originate?
-   - What called this with bad value?
-   - Keep tracing up until you find the source
-   - Fix at source, not at symptom
-   - See @root-cause-tracing.md for the complete backward tracing technique
+5. **追踪数据流**
+   - 错误值来自哪里？
+   - 什么用错误值调用了这个？
+   - 持续向上追踪直到找到源头
+   - 在源头修复，而非在症状处
+   - 完整的向后追踪技术见 @root-cause-tracing.md
 
-### Phase 2: Pattern Analysis
-
-**Find the pattern before fixing:**
+### 阶段 2：模式分析
+
+**在修复之前找到模式：**
 
-1. **Find Working Examples**
-   - Locate similar working code in same codebase
-   - What works that's similar to what's broken?
+1. **找到工作示例**
+   - 在同一代码库中定位类似的正常工作代码
+   - 什么与坏掉的东西相似但有效？
 
-2. **Compare Against References**
-   - If implementing pattern, read reference implementation COMPLETELY
-   - Don't skim — read every line
-   - Understand the pattern fully before applying
+2. **与参考对比**
+   - 如果实现某个模式， **完整** 阅读参考实现
+   - 不要略读——逐行阅读
+   - 在应用模式之前完全理解它
 
-3. **Identify Differences**
-   - What's different between working and broken?
-   - List every difference, however small
-   - Don't assume "that can't matter"
+3. **识别差异**
+   - 正常和坏掉之间有什么不同？
+   - 列出每个差异，无论多小
+   - 不要假设"那不重要"
 
-4. **Understand Dependencies**
-   - What other components does this need?
-   - What settings, config, environment?
-   - What assumptions does it make?
+4. **理解依赖**
+   - 这需要哪些其他组件？
+   - 什么设置、配置、环境？
+   - 它做了什么假设？
 
-### Phase 3: Hypothesis
+### 阶段 3：假设
 
-**Scientific method with ranked hypotheses:**
+**使用排序假设的科学方法：**
 
-1. **Generate 3–5 Ranked Hypotheses**
-   - **Single-hypothesis generation anchors on the first plausible idea.** Force yourself to generate multiple.
-   - Each hypothesis must be **falsifiable**: state the prediction it makes.
-   - Format: *"If <X> is the cause, then <changing Y> will make the bug disappear / <changing Z> will make it worse."*
-   - If you cannot state the prediction, the hypothesis is a vibe — discard or sharpen it.
+1. **生成 3-5 个排序假设**
+   - **单一假设生成锚定在第一个合理想法上。** 强迫自己生成多个。
+   - 每个假设必须是 **可证伪的**：陈述它做出的预测。
+   - 格式：*"如果 <X> 是原因，那么 <改变 Y> 会让 Bug 消失 / <改变 Z> 会让它更糟。"*
+   - 如果你无法陈述预测，这个假设只是一种感觉——丢弃或精炼它。
 
-2. **Show the Ranked List to the User**
-   - They often have domain knowledge that re-ranks instantly ("we just deployed a change to #3"), or know hypotheses they've already ruled out.
-   - Cheap checkpoint, big time saver.
-   - Don't block on it — proceed with your ranking if the user is AFK.
+2. **向用户展示排序列表**
+   - 他们通常有领域知识能立即重新排序（"我们刚刚部署了 #3 的变更"），或知道他们已经排除的假设。
+   - 便宜的检查点，大量时间节省。
+   - 不要因此阻塞——如果用户不在，按你的排序继续。
 
-3. **Form Single Hypothesis**
-   - State clearly: "I think X is the root cause because Y"
-   - Write it down
-   - Be specific, not vague
+3. **形成单一假设**
+   - 清晰陈述："我认为 X 是根因，因为 Y"
+   - 写下来
+   - 要具体，不要模糊
 
-4. **Test Minimally**
-   - Make the SMALLEST possible change to test hypothesis
-   - **Change one variable at a time**
-   - Don't fix multiple things at once
+4. **最小化测试**
+   - 做 **最小** 的改变来测试假设
+   - **一次只改变一个变量**
+   - 不要一次修复多件事
 
-5. **Verify Before Continuing**
-   - Did it work? Yes → proceed to fix
-   - Didn't work? Form NEW hypothesis
-   - DON'T add more fixes on top
+5. **在继续之前验证**
+   - 生效了吗？是 → 进入修复
+   - 没有？形成 **新** 假设
+   - 不要在之上添加更多修复
 
-6. **When You Don't Know**
-   - Say "I don't understand X"
-   - Don't pretend to know
-   - Ask for help
-   - Research more
+6. **当你不知道时**
+   - 说"我不理解 X"
+   - 不要假装知道
+   - 寻求帮助
+   - 做更多研究
 
-### Phase 4: Instrument + Fix
+### 阶段 4：插桩 + 修复
 
-**Instrumentation:**
+**插桩：**
 
-Each probe must map to a specific prediction from Phase 3.
+每个探测必须映射到阶段 3 中的具体预测。
 
-Tool preference:
-1. **Debugger / REPL inspection** if the env supports it. One breakpoint beats ten logs.
-2. **Targeted logs** at the boundaries that distinguish hypotheses.
-3. Never "log everything and grep".
+工具偏好：
+1. **调试器 / REPL 检查**（如果环境支持）。一个断点胜过十个日志。
+2. **有针对性的日志** 在区分假设的边界处。
+3. 永远不要"记录一切然后 grep"。
 
-**Tag every debug log** with a unique prefix, e.g. `[DEBUG-a4f2]`. Cleanup at the end becomes a single grep. Untagged logs survive; tagged logs die.
+**用唯一前缀标记每个调试日志**，例如 `[DEBUG-a4f2]`。最终清理变成一次 grep。未标记的日志存活；已标记的日志死亡。
 
-**Perf branch.** For performance regressions, logs are usually wrong. Instead: establish a baseline measurement (timing harness, `performance.now()`, profiler, query plan), then bisect. Measure first, fix second.
+**性能分支。** 对于性能回归，日志通常是错的。改为：建立基线测量（计时 harness、`performance.now()`、分析器、查询计划），然后二分法。先测量，后修复。
 
-**Fix:**
+**修复：**
 
-1. **Write Regression Test BEFORE the Fix**
-   - Only if there is a **correct seam** for it.
-   - A correct seam is one where the test exercises the **real bug pattern** as it occurs at the call site.
-   - If the only available seam is too shallow (unit test that can't replicate the chain that triggered the bug), a regression test there gives false confidence.
-   - **If no correct seam exists, that itself is the finding.** Note it. The codebase architecture is preventing the bug from being locked down. Flag this.
+1. **在修复之前编写回归测试**
+   - 仅当存在 **正确的缝** 时。
+   - 正确的缝是指测试在调用站点以 **真实 Bug 模式** 出现时练习它。
+   - 如果唯一可用的缝太浅（无法复现触发 Bug 的链条的单元测试），那里的回归测试会给出虚假信心。
+   - **如果不存在正确的缝，那本身就是发现。** 记录下来。代码库架构阻止了 Bug 被锁定。标记它。
 
-2. **Implement Single Fix**
-   - Address the root cause identified
-   - ONE change at a time
-   - No "while I'm here" improvements
-   - No bundled refactoring
+2. **实施单一修复**
+   - 针对已识别的根因
+   - 一次一个变更
+   - 没有"既然我在这"的改进
+   - 没有捆绑重构
 
-3. **Verify Fix**
-   - Regression test passes?
-   - No other tests broken?
-   - Re-run the Phase 0 feedback loop against the original (un-minimised) scenario.
-   - Issue actually resolved?
+3. **验证修复**
+   - 回归测试通过了？
+   - 没有其他测试坏了？
+   - 针对原始（未最小化）场景重新运行阶段 0 反馈循环。
+   - 问题真正解决了吗？
 
-4. **Apply defense-in-depth:** Add validation at multiple layers to make the bug structurally impossible. See @defense-in-depth.md.
+4. **应用纵深防御：** 在多层添加验证，使 Bug 在结构上不可能发生。见 @defense-in-depth.md。
 
-5. **If Fix Doesn't Work**
-   - STOP
-   - Count: How many fixes have you tried?
-   - If < 3: Return to Phase 1, re-analyze with new information
-   - **If ≥ 3: STOP and question the architecture**
+5. **如果修复不起作用**
+   - 停下来
+   - 计数：你尝试了多少次修复？
+   - 如果 < 3：返回阶段 1，用新信息重新分析
+   - **如果 ≥ 3：停下来并质疑架构**
 
-6. **If 3+ Fixes Failed: Question Architecture**
+6. **如果 3+ 次修复失败：质疑架构**
 
-   **Pattern indicating architectural problem:**
-   - Each fix reveals new shared state/coupling/problem in different place
-   - Fixes require "massive refactoring" to implement
-   - Each fix creates new symptoms elsewhere
+   **表明架构问题的模式：**
+   - 每次修复都揭示新的共享状态 / 耦合 / 其他位置的问题
+   - 修复需要"大规模重构"才能实施
+   - 每次修复都在其他地方创建新症状
 
-   **STOP and question fundamentals:**
-   - Is this pattern fundamentally sound?
-   - Are we "sticking with it through sheer inertia"?
-   - Should we refactor architecture vs. continue fixing symptoms?
+   **停下来质疑基础：**
+   - 这个模式根本合理吗？
+   - 我们是在"纯粹出于惯性坚持它"吗？
+   - 我们应该重构架构而非继续修复症状吗？
 
-   **Discuss with your human partner before attempting more fixes.**
+   **在尝试更多修复之前与你的用户伙伴讨论。**
 
-   This is NOT a failed hypothesis — this is a wrong architecture.
+   这不是失败的假设——这是错误的架构。
 
-### Phase 5: Cleanup + Post-Mortem
+### 阶段 5：清理 + 事后分析
 
-Required before declaring done:
+在宣布完成之前必须完成：
 
-- [ ] Original repro no longer reproduces (re-run the Phase 0 loop)
-- [ ] Regression test passes (or absence of seam is documented)
-- [ ] All `[DEBUG-...]` instrumentation removed (`grep` the prefix)
-- [ ] Throwaway prototypes deleted (or moved to a clearly-marked debug location)
-- [ ] The hypothesis that turned out correct is stated in the commit / PR message — so the next debugger learns
-- [ ] Defense-in-depth validation at each layer data passes through
+- [ ] 原始复现不再复现（重新运行阶段 0 循环）
+- [ ] 回归测试通过（或缺乏缝的情况已记录）
+- [ ] 所有 `[DEBUG-...]` 插桩已移除（`grep` 前缀）
+- [ ] 一次性原型已删除（或移动到明确标记的调试位置）
+- [ ] 最终正确的假设在提交 / PR 消息中陈述——以便下一个调试者学习
+- [ ] 数据通过的每层都有纵深防御验证
 
-**Then ask: what would have prevented this bug?** If the answer involves architectural change (no good test seam, tangled callers, hidden coupling), hand off to an architecture improvement skill with the specifics. Make the recommendation **after** the fix is in, not before — you have more information now than when you started.
+**然后问：什么能预防这个 Bug？** 如果答案涉及架构变更（没有好的测试缝、调用者混乱、隐藏耦合），将具体细节交给架构改进技能。在修复完成 **之后** 提出推荐，而非之前——你现在拥有的信息比开始时更多。
 
-## Supporting Techniques
+## 支持技术
 
-These techniques are available in this directory:
+此目录中可用的技术：
 
-- **@root-cause-tracing.md** — Trace bugs backward through call stack to find original trigger
-- **@defense-in-depth.md** — Add validation at multiple layers after finding root cause
-- **@condition-based-waiting.md** — Replace arbitrary timeouts with condition polling
+- **@root-cause-tracing.md** —— 通过调用堆栈向后追踪 Bug 以找到原始触发器
+- **@defense-in-depth.md** —— 在找到根因后在多层添加验证
+- **@condition-based-waiting.md** —— 用条件轮询替换任意超时
 
-**Related skills:**
-- **mysuperpowers:tdd** — For writing failing test cases
-- **mysuperpowers:verification-before-completion** — Verify fix works before claiming success
+**相关技能：**
+- **mysuperpowers:tdd** —— 用于编写失败测试用例
+- **mysuperpowers:verification-before-completion** —— 在宣称成功之前验证修复有效
 
-## Quick Reference
+## 快速参考
 
-| Phase | Key Activities | Success Criteria |
+| 阶段 | 关键活动 | 成功标准 |
 |-------|---------------|------------------|
-| **0. Feedback Loop** | Build fast, deterministic pass/fail signal | Can reproduce bug on demand |
-| **1. Root Cause** | Read errors, reproduce, check changes, trace data | Understand WHAT and WHY |
-| **2. Pattern** | Find working examples, compare | Identify differences |
-| **3. Hypothesis** | Generate ranked list, test minimally | Confirmed or new hypothesis |
-| **4. Instrument + Fix** | Create test, instrument, fix, verify | Bug resolved, tests pass |
-| **5. Cleanup** | Remove instrumentation, regression test, post-mortem | Bug locked down |
+| **0. 反馈循环** | 构建快速、确定性的通过 / 失败信号 | 能按需复现 Bug |
+| **1. 根因** | 阅读错误、复现、检查变更、追踪数据 | 理解 WHAT 和 WHY |
+| **2. 模式** | 找到工作示例、对比 | 识别差异 |
+| **3. 假设** | 生成排序列表、最小化测试 | 确认或新假设 |
+| **4. 插桩 + 修复** | 创建测试、插桩、修复、验证 | Bug 解决，测试通过 |
+| **5. 清理** | 移除插桩、回归测试、事后分析 | Bug 已锁定 |
 
-## Common Rationalizations
+## 常见合理化借口
 
-| Excuse | Reality |
+| 借口 | 现实 |
 |--------|---------|
-| "Issue is simple, don't need process" | Simple issues have root causes too. Process is fast for simple bugs. |
-| "Emergency, no time for process" | Systematic debugging is FASTER than guess-and-check thrashing. |
-| "Just try this first, then investigate" | First fix sets the pattern. Do it right from the start. |
-| "I'll write test after confirming fix works" | Untested fixes don't stick. Test first proves it. |
-| "Multiple fixes at once saves time" | Can't isolate what worked. Causes new bugs. |
-| "Reference too long, I'll adapt the pattern" | Partial understanding guarantees bugs. Read it completely. |
-| "I see the problem, let me fix it" | Seeing symptoms ≠ understanding root cause. |
-| "One more fix attempt" (after 2+ failures) | 3+ failures = architectural problem. Question pattern, don't fix again. |
-| "I can fix it without a feedback loop" | Without a repro signal you're flying blind. Build the loop first. |
-| "Just log everything and grep" | Targeted logs at hypothesis boundaries beat firehose every time. |
+| "问题简单，不需要流程" | 简单问题也有根因。流程对简单 Bug 很快。 |
+| "紧急情况，没时间走流程" | 系统调试比猜测-检查的乱试 **更快**。 |
+| "先试这个，然后调查" | 第一次修复设定模式。从一开始就做对。 |
+| "确认修复有效后我写测试" | 未测试的修复不会持久。测试优先证明它。 |
+| "一次多个修复节省时间" | 无法隔离什么生效了。导致新 Bug。 |
+| "参考太长，我会适配模式" | 部分理解保证 Bug。完整阅读它。 |
+| "我看到问题了，让我修复" | 看到症状 ≠ 理解根因。 |
+| "再试一次修复"（在 2+ 次失败后） | 3+ 次失败 = 架构问题。质疑模式，不要再修复。 |
+| "没有反馈循环我也能修复" | 没有可复现信号你就是在盲飞。先构建循环。 |
+| "记录一切然后 grep" | 假设边界处的有针对性的日志每次都胜过消防水带。 |
 
-## Red Flags — STOP and Follow Process
+## 危险信号——停下来遵循流程
 
-If you catch yourself thinking:
-- "Quick fix for now, investigate later"
-- "Just try changing X and see if it works"
-- "Add multiple changes, run tests"
-- "Skip the test, I'll manually verify"
-- "It's probably X, let me fix that"
-- "I don't fully understand but this might work"
-- "Pattern says X but I'll adapt it differently"
-- "Here are the main problems: [lists fixes without investigation]"
-- Proposing solutions before tracing data flow
-- **"One more fix attempt" (when already tried 2+)**
-- **Each fix reveals new problem in different place**
+如果你发现自己想：
+- "先快速修复，稍后调查"
+- "试着改 X 看看是否有效"
+- "添加多个变更，运行测试"
+- "跳过测试，我会手动验证"
+- "可能是 X，让我修复那个"
+- "我不完全理解但这可能有效"
+- "模式说 X 但我会不同地适配它"
+- "以下是主要问题：[列出修复而不调查]"
+- 在追踪数据流之前提出解决方案
+- **"再试一次修复"（当已经尝试 2+ 次时）**
+- **每次修复都在不同地方揭示新问题**
 
-**ALL of these mean: STOP. Return to Phase 0 or Phase 1.**
+**所有这些都意味着：停下来。返回阶段 0 或阶段 1。**
 
-**If 3+ fixes failed:** Question the architecture.
+**如果 3+ 次修复失败：** 质疑架构。
 
-## When Process Reveals "No Root Cause"
+## 当流程揭示"没有根因"时
 
-If systematic investigation reveals issue is truly environmental, timing-dependent, or external:
+如果系统调查揭示问题确实是环境相关的、时序依赖的或外部的：
 
-1. You've completed the process
-2. Document what you investigated
-3. Implement appropriate handling (retry, timeout, error message)
-4. Add monitoring/logging for future investigation
+1. 你已完成流程
+2. 记录你调查了什么
+3. 实施适当的处理（重试、超时、错误信息）
+4. 添加监控 / 日志以供将来调查
 
-**But:** 95% of "no root cause" cases are incomplete investigation.
+**但是：** 95% 的"没有根因"案例是调查不完整。

@@ -1,18 +1,18 @@
-# Domain Docs
+# 领域文档
 
-How the MySuperPowers skills should consume this repo's domain documentation when exploring the codebase.
+MySuperPowers 技能在探索代码库时，应如何查阅本仓库的领域文档。
 
-## Before exploring, read these
+## 探索前请先阅读以下内容
 
-- **`CONTEXT.md`** at the repo root, or
-- **`CONTEXT-MAP.md`** at the repo root if it exists — it points at one `CONTEXT.md` per context. Read each one relevant to the topic.
-- **`docs/adr/`** — read ADRs that touch the area you're about to work in. In multi-context repos, also check `src/<context>/docs/adr/` for context-scoped decisions.
+- 仓库根目录下的 **`CONTEXT.md`**，或
+- 若存在根目录下的 **`CONTEXT-MAP.md`**，则读取该文件——它会指向每个上下文对应的 `CONTEXT.md`，请阅读与主题相关的所有文件。
+- **`docs/adr/`** —— 阅读涉及你即将工作的区域的架构决策记录（ADR）。在多上下文仓库中，还需检查 `src/<context>/docs/adr/` 下的上下文级决策。
 
-If any of these files don't exist, **proceed silently**. Don't flag their absence; don't suggest creating them upfront. The producer skill (`/grill-with-docs`) creates them lazily when terms or decisions actually get resolved.
+若上述文件不存在，**请静默继续**。不要提示缺失，也不要建议提前创建。生产者技能（`/grill-with-docs`）会在术语或决策实际确定后按需创建这些文件。
 
-## File structure
+## 文件结构
 
-Single-context repo (most repos):
+单上下文仓库（大多数仓库）：
 
 ```
 /
@@ -23,33 +23,33 @@ Single-context repo (most repos):
 └── src/
 ```
 
-Multi-context repo (presence of `CONTEXT-MAP.md` at the root):
+多上下文仓库（根目录存在 `CONTEXT-MAP.md`）：
 
 ```
 /
 ├── CONTEXT-MAP.md
-├── docs/adr/                          ← system-wide decisions
+├── docs/adr/                          ← 系统级决策
 └── src/
     ├── ordering/
     │   ├── CONTEXT.md
-    │   └── docs/adr/                  ← context-specific decisions
+    │   └── docs/adr/                  ← 上下文级决策
     └── billing/
         ├── CONTEXT.md
         └── docs/adr/
 ```
 
-## Use the glossary's vocabulary
+## 使用术语表的词汇
 
-When your output names a domain concept (in an issue title, a refactor proposal, a hypothesis, a test name), use the term as defined in `CONTEXT.md`. Don't drift to synonyms the glossary explicitly avoids.
+当你的输出涉及领域概念时（例如问题标题、重构提案、假设、测试名称），请使用 `CONTEXT.md` 中定义的术语。不要使用术语表明确排除的同义词。
 
-If the concept you need isn't in the glossary yet, that's a signal — either you're inventing language the project doesn't use (reconsider) or there's a real gap (note it for `/grill-with-docs`).
+若你需要的概念尚未收录在术语表中，这是一个信号：要么你在创造项目不使用的表述（请重新考虑），要么确实存在缺口（请记录并反馈给 `/grill-with-docs`）。
 
-## Flag ADR conflicts
+## 标记 ADR 冲突
 
-If your output contradicts an existing ADR, surface it explicitly rather than silently overriding:
+若你的输出与现有 ADR 冲突，请明确说明，不要静默覆盖：
 
 > _Contradicts ADR-0007 (event-sourced orders) — but worth reopening because…_
 
 ---
 
-*This skill originates from Matt Pocock Skills, adapted for MySuperPowers.*
+*本技能源自 Matt Pocock Skills，为 MySuperPowers 进行了适配。*

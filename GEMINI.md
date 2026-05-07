@@ -3,4 +3,4 @@
 @./skills/engineering/diagnose/SKILL.md
 
 References:
-- Tool mapping: ./references/gemini-tools.md
+- 工具映射: ./references/gemini-tools.md

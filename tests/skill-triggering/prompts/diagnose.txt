@@ -1,0 +1,1 @@
+My application is running slowly and I can't figure out why. The database queries seem to be taking forever and the UI freezes sometimes. Can you help me diagnose what's going on?

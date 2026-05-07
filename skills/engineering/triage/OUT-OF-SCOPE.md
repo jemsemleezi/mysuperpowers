@@ -1,11 +1,11 @@
-# Out-of-Scope Knowledge Base
+# 范围外知识库
 
-The `.out-of-scope/` directory in a repo stores persistent records of rejected feature requests. It serves two purposes:
+仓库中的 `.out-of-scope/` 目录存储被拒绝的功能请求的持久记录。它有两个用途：
 
-1. **Institutional memory** — why a feature was rejected, so the reasoning isn't lost when the issue is closed
-2. **Deduplication** — when a new issue comes in that matches a prior rejection, the skill can surface the previous decision instead of re-litigating it
+1. **制度记忆** —— 为何某个功能被拒绝，这样推理不会在问题关闭后丢失
+2. **去重** —— 当新问题与先前的拒绝匹配时，技能可以展示先前的决策而非重新争论
 
-## Directory structure
+## 目录结构
 
 ```
 .out-of-scope/
@@ -14,92 +14,89 @@ The `.out-of-scope/` directory in a repo stores persistent records of rejected f
 └── graphql-api.md
 ```
 
-One file per **concept**, not per issue. Multiple issues requesting the same thing are grouped under one file.
+每个 **概念** 一个文件，而非每个问题一个。多个请求同一事物的问题归入一个文件。
 
-## File format
+## 文件格式
 
-The file should be written in a relaxed, readable style — more like a short design document than a database entry. Use paragraphs, code samples, and examples to make the reasoning clear and useful to someone encountering it for the first time.
+文件应以轻松、可读的风格编写——更像是简短的设计文档而非数据库条目。使用段落、代码示例和例子，让第一次接触它的人能清晰理解推理过程。
 
 ```markdown
 # Dark Mode
 
-This project does not support dark mode or user-facing theming.
+本项目不支持深色模式或面向用户的主题。
 
-## Why this is out of scope
+## 为何超出范围
 
-The rendering pipeline assumes a single color palette defined in
-`ThemeConfig`. Supporting multiple themes would require:
+渲染管道假设了 `ThemeConfig` 中定义的单一调色板。支持多主题需要：
 
-- A theme context provider wrapping the entire component tree
-- Per-component theme-aware style resolution
-- A persistence layer for user theme preferences
+- 包裹整个组件树的主题上下文提供者
+- 逐组件的主题感知样式解析
+- 用户主题偏好的持久化层
 
-This is a significant architectural change that doesn't align with the
-project's focus on content authoring. Theming is a concern for downstream
-consumers who embed or redistribute the output.
+这是一项重大的架构变更，与项目专注于内容创作的定位不符。主题是下游消费者嵌入或重新分发输出时才需要关注的。
 
 ```ts
-// The current ThemeConfig interface is not designed for runtime switching:
+// 当前的 ThemeConfig 接口不是为运行时切换设计的：
 interface ThemeConfig {
-  colors: ColorPalette; // single palette, resolved at build time
+  colors: ColorPalette; // 单一调色板，构建时解析
   fonts: FontStack;
 }
 ```
 
-## Prior requests
+## 先前的请求
 
-- #42 — "Add dark mode support"
-- #87 — "Night theme for accessibility"
-- #134 — "Dark theme option"
+- #42 —— "Add dark mode support"
+- #87 —— "Night theme for accessibility"
+- #134 —— "Dark theme option"
 ```
 
-### Naming the file
+### 命名文件
 
-Use a short, descriptive kebab-case name for the concept: `dark-mode.md`, `plugin-system.md`, `graphql-api.md`. The name should be recognizable enough that someone browsing the directory understands what was rejected without opening the file.
+使用简短、描述性的 kebab-case 概念名：`dark-mode.md`、`plugin-system.md`、`graphql-api.md`。名称应该让浏览目录的人无需打开文件就能理解被拒绝的是什么。
 
-### Writing the reason
+### 编写理由
 
-The reason should be substantive — not "we don't want this" but why. Good reasons reference:
+理由应该是实质性的——不是"我们不想要这个"，而是为什么。好的理由引用：
 
-- Project scope or philosophy ("This project focuses on X; theming is a downstream concern")
-- Technical constraints ("Supporting this would require Y, which conflicts with our Z architecture")
-- Strategic decisions ("We chose to use A instead of B because...")
+- 项目范围或哲学（"这个项目专注于 X；主题是下游关注点"）
+- 技术约束（"支持这需要 Y，与我们的 Z 架构冲突"）
+- 战略决策（"我们选择使用 A 而非 B，因为..."）
 
-The reason should be durable. Avoid referencing temporary circumstances ("we're too busy right now") — those aren't real rejections, they're deferrals.
+理由应该是持久的。避免引用临时情况（"我们现在太忙了"）——那些不是真正的拒绝，只是延期。
 
-## When to check `.out-of-scope/`
+## 何时检查 `.out-of-scope/`
 
-During triage (Step 1: Gather context), read all files in `.out-of-scope/`. When evaluating a new issue:
+在分类期间（步骤 1：收集上下文），阅读 `.out-of-scope/` 中的所有文件。评估新问题时：
 
-- Check if the request matches an existing out-of-scope concept
-- Matching is by concept similarity, not keyword — "night theme" matches `dark-mode.md`
-- If there's a match, surface it to the maintainer: "This is similar to `.out-of-scope/dark-mode.md` — we rejected this before because [reason]. Do you still feel the same way?"
+- 检查请求是否匹配已有的范围外概念
+- 匹配基于概念相似性，而非关键词——"night theme" 匹配 `dark-mode.md`
+- 如果匹配，向维护者展示："这类似于 `.out-of-scope/dark-mode.md`——我们之前因为这个原因拒绝了它。你仍然持相同看法吗？"
 
-The maintainer may:
+维护者可以：
 
-- **Confirm** — the new issue gets added to the existing file's "Prior requests" list, then closed
-- **Reconsider** — the out-of-scope file gets deleted or updated, and the issue proceeds through normal triage
-- **Disagree** — the issues are related but distinct, proceed with normal triage
+- **确认** —— 新问题添加到现有文件的"Prior requests"列表中，然后关闭
+- **重新考虑** —— 删除或更新范围外文件，问题继续正常分类流程
+- **不同意** —— 问题相关但不同，继续正常分类
 
-## When to write to `.out-of-scope/`
+## 何时写入 `.out-of-scope/`
 
-Only when an **enhancement** (not a bug) is rejected as `wontfix`. The flow:
+仅当 **改进**（而非 Bug）被标记为 `wontfix` 时。流程：
 
-1. Maintainer decides a feature request is out of scope
-2. Check if a matching `.out-of-scope/` file already exists
-3. If yes: append the new issue to the "Prior requests" list
-4. If no: create a new file with the concept name, decision, reason, and first prior request
-5. Post a comment on the issue explaining the decision and mentioning the `.out-of-scope/` file
-6. Close the issue with the `wontfix` label
+1. 维护者决定某个功能请求超出范围
+2. 检查是否已存在匹配的范围外文件
+3. 如果是：将新问题追加到"Prior requests"列表
+4. 如果否：创建新文件，包含概念名、决策、理由和第一个先前请求
+5. 在问题上发布评论解释决策并提及范围外文件
+6. 使用 `wontfix` 标签关闭问题
 
-## Updating or removing out-of-scope files
+## 更新或删除范围外文件
 
-If the maintainer changes their mind about a previously rejected concept:
+如果维护者对先前拒绝的概念改变了想法：
 
-- Delete the `.out-of-scope/` file
-- The skill does not need to reopen old issues — they're historical records
-- The new issue that triggered the reconsideration proceeds through normal triage
+- 删除范围外文件
+- 技能无需重新打开旧问题——它们是历史记录
+- 触发重新考虑的新问题继续正常分类流程
 
 ---
 
-*This skill originates from Matt Pocock Skills, adapted for MySuperPowers.*
+*本技能源自 Matt Pocock Skills，为 MySuperPowers 进行了适配。*

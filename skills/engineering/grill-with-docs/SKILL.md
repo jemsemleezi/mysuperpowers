@@ -1,27 +1,27 @@
 ---
 name: grill-with-docs
-description: Grilling session that challenges your plan against the existing domain model, sharpens terminology, and updates documentation (CONTEXT.md, ADRs) inline as decisions crystallise. Use when user wants to stress-test a plan against their project's language and documented decisions.
+description: "一场严格的访谈会话，用现有领域模型检验你的计划、精炼术语，并在决策成型时内联更新文档（CONTEXT.md、ADR）。当用户希望用项目的语言和已记录的决策对计划进行压力测试时使用。"
 ---
 
 <what-to-do>
 
-Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.
+毫不留情地就计划的各个方面对我进行访谈，直到我们达成共识。逐一遍历设计树的每个分支，逐一解决决策之间的依赖关系。对于每个问题，提供你的推荐答案。
 
-Ask the questions one at a time, waiting for feedback on each question before continuing.
+一次只问一个问题，等待用户对每个问题的反馈后再继续。
 
-If a question can be answered by exploring the codebase, explore the codebase instead.
+如果某个问题可以通过探索代码库来回答，那就去探索代码库。
 
 </what-to-do>
 
 <supporting-info>
 
-## Domain awareness
+## 领域感知
 
-During codebase exploration, also look for existing documentation:
+在探索代码库期间，同时查找现有文档：
 
-### File structure
+### 文件结构
 
-Most repos have a single context:
+大多数仓库只有一个上下文：
 
 ```
 /
@@ -33,60 +33,60 @@ Most repos have a single context:
 └── src/
 ```
 
-If a `CONTEXT-MAP.md` exists at the root, the repo has multiple contexts. The map points to where each one lives:
+如果根目录存在 `CONTEXT-MAP.md`，说明仓库有多个上下文。该映射文件指向每个上下文的存放位置：
 
 ```
 /
 ├── CONTEXT-MAP.md
 ├── docs/
-│   └── adr/                          ← system-wide decisions
+│   └── adr/                          ← 系统级决策
 ├── src/
 │   ├── ordering/
 │   │   ├── CONTEXT.md
-│   │   └── docs/adr/                 ← context-specific decisions
+│   │   └── docs/adr/                 ← 上下文专属决策
 │   └── billing/
 │       ├── CONTEXT.md
 │       └── docs/adr/
 ```
 
-Create files lazily — only when you have something to write. If no `CONTEXT.md` exists, create one when the first term is resolved. If no `docs/adr/` exists, create it when the first ADR is needed.
+惰性创建文件——只有当你有内容要写时才创建。如果不存在 `CONTEXT.md`，在第一个术语被确定时创建它。如果不存在 `docs/adr/`，在需要第一个 ADR 时创建它。
 
-## During the session
+## 会话期间
 
-### Challenge against the glossary
+### 对照术语表提出挑战
 
-When the user uses a term that conflicts with the existing language in `CONTEXT.md`, call it out immediately. "Your glossary defines 'cancellation' as X, but you seem to mean Y — which is it?"
+当用户使用的术语与 `CONTEXT.md` 中的现有语言冲突时，立即指出。"你的术语表将 'cancellation' 定义为 X，但你似乎指的是 Y——到底是哪个？"
 
-### Sharpen fuzzy language
+### 精炼模糊语言
 
-When the user uses vague or overloaded terms, propose a precise canonical term. "You're saying 'account' — do you mean the Customer or the User? Those are different things."
+当用户使用模糊或重载的术语时，提出一个精确的规范术语。"你说的是 'account'——你指的是 Customer 还是 User？这是两个不同的东西。"
 
-### Discuss concrete scenarios
+### 讨论具体场景
 
-When domain relationships are being discussed, stress-test them with specific scenarios. Invent scenarios that probe edge cases and force the user to be precise about the boundaries between concepts.
+当讨论领域关系时，用具体场景进行压力测试。发明探索边界情况的场景，迫使用户精确界定概念之间的边界。
 
-### Cross-reference with code
+### 与代码交叉引用
 
-When the user states how something works, check whether the code agrees. If you find a contradiction, surface it: "Your code cancels entire Orders, but you just said partial cancellation is possible — which is right?"
+当用户描述某件事的工作方式时，检查代码是否同意。如果发现矛盾，将其暴露出来："你的代码会取消整个 Orders，但你刚才说部分取消是可能的——哪个是对的？"
 
-### Update CONTEXT.md inline
+### 内联更新 CONTEXT.md
 
-When a term is resolved, update `CONTEXT.md` right there. Don't batch these up — capture them as they happen. Use the format in [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md).
+当某个术语被确定后，立即更新 `CONTEXT.md`。不要批量处理——在发生时立刻捕获。使用 [CONTEXT-FORMAT.md](./CONTEXT-FORMAT.md) 中定义的格式。
 
-Don't couple `CONTEXT.md` to implementation details. Only include terms that are meaningful to domain experts.
+不要将 `CONTEXT.md` 与实现细节耦合。只包含对领域专家有意义的术语。
 
-### Offer ADRs sparingly
+### 谨慎提供 ADR
 
-Only offer to create an ADR when all three are true:
+只有当以下三个条件 **全部** 满足时，才提议创建 ADR：
 
-1. **Hard to reverse** — the cost of changing your mind later is meaningful
-2. **Surprising without context** — a future reader will wonder "why did they do it this way?"
-3. **The result of a real trade-off** — there were genuine alternatives and you picked one for specific reasons
+1. **难以逆转** —— 之后改变想法的成本是显著的
+2. **没有上下文会让人困惑** —— 未来的读者会疑惑"他们为什么这样做？"
+3. **真正权衡后的结果** —— 存在真正的替代方案，你出于特定理由选择了其中一个
 
-If any of the three is missing, skip the ADR. Use the format in [ADR-FORMAT.md](./ADR-FORMAT.md).
+如果任何一个条件不满足，跳过 ADR。使用 [ADR-FORMAT.md](./ADR-FORMAT.md) 中定义的格式。
 
 </supporting-info>
 
 ---
 
-*This skill originates from Matt Pocock Skills, adapted for MySuperPowers.*
+*本技能源自 Matt Pocock Skills，为 MySuperPowers 进行了适配。*

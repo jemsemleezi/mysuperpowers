@@ -1,8 +1,8 @@
-# Good and Bad Tests
+# 好的测试与坏的测试
 
-## Good Tests
+## 好的测试
 
-**Integration-style**: Test through real interfaces, not mocks of internal parts.
+**集成风格**：通过真实接口测试，而非内部组件的 mock。
 
 ```typescript
 // GOOD: Tests observable behavior
@@ -14,17 +14,17 @@ test("user can checkout with valid cart", async () => {
 });
 ```
 
-Characteristics:
+特征：
 
-- Tests behavior users/callers care about
-- Uses public API only
-- Survives internal refactors
-- Describes WHAT, not HOW
-- One logical assertion per test
+- 测试用户或调用者关心的行为
+- 仅使用公共 API
+- 内部重构时不会失效
+- 描述「做什么」而非「怎么做」
+- 每个测试仅包含一个逻辑断言
 
-## Bad Tests
+## 坏的测试
 
-**Implementation-detail tests**: Coupled to internal structure.
+**实现细节测试**：与内部结构强耦合。
 
 ```typescript
 // BAD: Tests implementation details
@@ -35,14 +35,14 @@ test("checkout calls paymentService.process", async () => {
 });
 ```
 
-Red flags:
+危险信号：
 
-- Mocking internal collaborators
-- Testing private methods
-- Asserting on call counts/order
-- Test breaks when refactoring without behavior change
-- Test name describes HOW not WHAT
-- Verifying through external means instead of interface
+- mock 内部协作组件
+- 测试私有方法
+- 断言调用次数或顺序
+- 重构未改变行为时测试仍会失败
+- 测试名称描述「怎么做」而非「做什么」
+- 通过外部手段而非接口验证
 
 ```typescript
 // BAD: Bypasses interface to verify

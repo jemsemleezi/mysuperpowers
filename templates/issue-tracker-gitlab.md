@@ -1,23 +1,23 @@
-# Issue tracker: GitLab
+# 问题追踪：GitLab
 
-Issues and PRDs for this repo live as GitLab issues. Use the [`glab`](https://gitlab.com/gitlab-org/cli) CLI for all operations.
+本仓库的问题（Issues）和产品需求文档（PRDs）均以 GitLab Issues 形式存在。所有操作请使用 [`glab`](https://gitlab.com/gitlab-org/cli) 命令行工具。
 
-## Conventions
+## 操作规范
 
-- **Create an issue**: `glab issue create --title "..." --description "..."`. Use a heredoc for multi-line descriptions. Pass `--description -` to open an editor.
-- **Read an issue**: `glab issue view <number> --comments`. Use `-F json` for machine-readable output.
-- **List issues**: `glab issue list --state opened -F json` with appropriate `--label` filters. Note that GitLab uses `opened` (not `open`) for the state value.
-- **Comment on an issue**: `glab issue note <number> --message "..."`. GitLab calls comments "notes".
-- **Apply / remove labels**: `glab issue update <number> --label "..."` / `--unlabel "..."`. Multiple labels can be comma-separated or by repeating the flag.
-- **Close**: `glab issue close <number>`. `glab issue close` does not accept a closing comment, so post the explanation first with `glab issue note <number> --message "..."`, then close.
-- **Merge requests**: GitLab calls PRs "merge requests". Use `glab mr create`, `glab mr view`, `glab mr note`, etc. — the same shape as `gh pr ...` with `mr` in place of `pr` and `note`/`--message` in place of `comment`/`--body`.
+- **创建问题**：`glab issue create --title "..." --description "..."`。多行描述请使用 heredoc 语法。传入 `--description -` 可打开编辑器编辑。
+- **查看问题**：`glab issue view <number> --comments`。添加 `-F json` 可获取机器可读的 JSON 输出。
+- **列出问题**：`glab issue list --state opened -F json`，按需添加 `--label` 过滤条件。注意 GitLab 的状态值使用 `opened`（而非 `open`）。
+- **评论问题**：`glab issue note <number> --message "..."`。GitLab 将评论称为 "notes"。
+- **添加/移除标签**：`glab issue update <number> --label "..."` / `--unlabel "..."`。多个标签可用逗号分隔或重复添加该参数。
+- **关闭问题**：`glab issue close <number>`。`glab issue close` 不支持添加关闭评论，请先通过 `glab issue note <number> --message "..."` 发布说明，再执行关闭。
+- **合并请求**：GitLab 将拉取请求（PR）称为 "合并请求（merge requests）"。使用 `glab mr create`、`glab mr view`、`glab mr note` 等命令，格式与 `gh pr ...` 类似，仅将 `pr` 替换为 `mr`，`comment`/`--body` 替换为 `note`/`--message`。
 
-Infer the repo from `git remote -v` — `glab` does this automatically when run inside a clone.
+`glab` 会自动从 `git remote -v` 推断仓库信息，在克隆目录中运行时无需额外配置。
 
-## When a skill says "publish to the issue tracker"
+## 当技能提到「发布到问题追踪器」时
 
-Create a GitLab issue.
+创建一个 GitLab 问题。
 
-## When a skill says "fetch the relevant ticket"
+## 当技能提到「获取相关工单」时
 
-Run `glab issue view <number> --comments`.
+运行 `glab issue view <number> --comments`。

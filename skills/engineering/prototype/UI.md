@@ -1,61 +1,61 @@
-# UI Prototype
+# UI 原型
 
-Generate **several radically different UI variations** on a single route, switchable from a floating bottom bar. The user flips between variants in the browser, picks one (or steals bits from each), then throws the rest away.
+在单个路由上生成**多个截然不同的 UI 变体**，可通过浮动底部栏切换。用户在浏览器中切换不同变体，选中一个（或组合各变体的优点），再删除其余变体。
 
-If the question is about logic/state rather than what something looks like — wrong branch. Use [LOGIC.md](LOGIC.md).
+如果问题涉及逻辑/状态而非界面外观，说明用错了分支。请使用 [LOGIC.md](LOGIC.md)。
 
-## When this is the right shape
+## 何时适用本模式
 
-- "What should this page look like?"
-- "I want to see a few options for this dashboard before committing."
-- "Try a different layout for the settings screen."
-- Any time the user would otherwise spend a day picking between three vague mockups in their head.
+- "这个页面应该长什么样？"
+- "在最终确定前，我想先看看这个仪表盘的几个设计方案。"
+- "试试设置页的不同布局。"
+- 凡是用户原本可能花一整天在脑子里纠结三个模糊稿件的场景，都适用。
 
-## Two sub-shapes — strongly prefer sub-shape A
+## 两种子模式 — 优先选择子模式 A
 
-A UI prototype is much easier to judge when it's **butting up against the rest of the app** — real header, real sidebar, real data, real density. A throwaway route on its own is a vacuum: every variant looks fine in isolation. Default to sub-shape A whenever there's a plausible existing page to host the variants. Only reach for sub-shape B if the prototype genuinely has no nearby home.
+当 UI 原型**贴合应用现有上下文**时，判断起来容易得多——真实的页头、真实的侧边栏、真实的数据、真实的密度。孤立的临时路由就像真空环境：每个变体单独看都没问题。只要存在合理的现有页面可以承载变体，就默认用子模式 A。只有当原型确实没有合适的归属页面时，才考虑子模式 B。
 
-### Sub-shape A — adjustment to an existing page (preferred)
+### 子模式 A — 调整现有页面（优先）
 
-The route already exists. Variants are rendered **on the same route**, gated by a `?variant=` URL search param. The existing data fetching, params, and auth all stay — only the rendering swaps. This is the default; pick it unless there's a specific reason not to.
+目标路由已存在。所有变体**在同一路由下渲染**，通过 `?variant=` URL 搜索参数控制。现有的数据请求、参数、鉴权逻辑全部保留，仅替换渲染部分。这是默认选择，除非有明确理由才不用。
 
-If the prototype is for something that doesn't yet have a page but *would naturally live inside one* (a new section of the dashboard, a new card on the settings screen, a new step in an existing flow) — that's still sub-shape A. Mount the variants inside the host page.
+如果原型对应的功能还没有独立页面，但*天然属于某个现有页面*（比如仪表盘的新板块、设置页的新卡片、现有流程的新步骤），仍属于子模式 A。将变体挂载到宿主页面内即可。
 
-### Sub-shape B — a new page (last resort)
+### 子模式 B — 新建页面（最后手段）
 
-Only use this when the thing being prototyped genuinely has no existing page to live inside — e.g. an entirely new top-level surface, or a flow that can't be embedded anywhere sensible.
+仅当原型功能确实没有现有页面可以归属时才使用——比如全新的顶级页面，或无法嵌入任何合理位置的流程。
 
-Create a **throwaway route** following whatever routing convention the project already uses — don't invent a new top-level structure. Name it so it's obviously a prototype (e.g. include the word `prototype` in the path or filename). Same `?variant=` pattern.
+遵循项目已有的路由规范创建**临时路由**，不要新造顶层结构。命名要明显标识是原型（比如在路径或文件名中包含 `prototype` 字样）。同样使用 `?variant=` 参数模式。
 
-Before committing to sub-shape B, sanity-check: is there really no existing page this could be embedded in? An empty route hides design problems that a populated one would expose.
+确定用子模式 B 前，先确认：真的没有现有页面可以嵌入这个原型吗？空路由会掩盖设计问题，而填充了真实内容的页面会暴露这些问题。
 
-In both sub-shapes the floating bottom bar is identical.
+两种子模式的浮动底部栏完全一致。
 
-## Process
+## 流程
 
-### 1. State the question and pick N
+### 1. 明确问题并选定变体数量 N
 
-Default to **3 variants**. More than 5 stops being radically different and starts being noise — cap there.
+默认生成**3 个变体**。超过 5 个就不再是截然不同的设计，反而会变成干扰项——上限设为 5。
 
-Write down the plan in one line, in the prototype's location or a top-of-file comment:
+用一句话写下计划，放在原型所在位置或文件顶部注释中：
 
-> "Three variants of the settings page, switchable via `?variant=`, on the existing `/settings` route."
+> "设置页的三个变体，通过 `?variant=` 参数切换，挂载在现有 `/settings` 路由上。"
 
-This works whether the user is here to push back or not.
+无论用户是否会提出异议，这一步都要做。
 
-### 2. Generate radically different variants
+### 2. 生成截然不同的变体
 
-Draft each variant. Hold each one to:
+起草每个变体，需满足以下要求：
 
-- The page's purpose and the data it has access to.
-- The project's component library / styling system (TailwindCSS, shadcn, MUI, plain CSS, whatever).
-- A clear exported component name, e.g. `VariantA`, `VariantB`, `VariantC`.
+- 符合页面定位，使用页面可获取的数据。
+- 遵循项目的组件库/样式系统（TailwindCSS、shadcn、MUI、纯 CSS 等）。
+- 导出明确的组件名，例如 `VariantA`、`VariantB`、`VariantC`。
 
-Variants must be **structurally different** — different layout, different information hierarchy, different primary affordance, not just different colours. Three slightly-tweaked card grids isn't a UI prototype, it's wallpaper. If two drafts come out too similar, redo one with explicit "do not use a card grid" guidance.
+变体必须**结构不同**——布局、信息层级、核心交互方式都要有差异，不能只是改颜色。三个微调过的卡片网格不算 UI 原型，只是壁纸。如果两个草稿过于相似，重新做一个，明确指定「不要使用卡片网格」。
 
-### 3. Wire them together
+### 3. 串联变体
 
-Create a single switcher component on the route:
+在路由上创建统一的切换器组件：
 
 ```tsx
 // pseudo-code — adapt to the project's framework
@@ -70,47 +70,47 @@ return (
 );
 ```
 
-For sub-shape A (existing page): keep all the existing data fetching above the switcher; only the rendered subtree changes per variant.
+子模式 A（现有页面）：切换器上方保留所有现有数据请求逻辑；每个变体仅替换渲染子树。
 
-For sub-shape B (new page): the throwaway route under `/prototype/<name>` mounts the same switcher.
+子模式 B（新页面）：`/prototype/<name>` 下的临时路由挂载同一个切换器。
 
-### 4. Build the floating switcher
+### 4. 实现浮动切换器
 
-A small fixed-position bar at the bottom-centre of the screen with three pieces:
+屏幕底部中央放置一个小型固定定位栏，包含三个部分：
 
-- **Left arrow** — cycles to the previous variant (wraps around).
-- **Variant label** — shows the current variant key and, if the variant exports a name, that name too. e.g. `B — Sidebar layout`.
-- **Right arrow** — cycles forward (wraps around).
+- **左箭头** — 切换到上一个变体（循环）。
+- **变体标签** — 显示当前变体标识，若变体导出了名称也一并显示，例如 `B — 侧边栏布局`。
+- **右箭头** — 切换到下一个变体（循环）。
 
-Behaviour:
+行为要求：
 
-- Clicking an arrow updates the URL search param (use the framework's router — `router.replace` on Next, `navigate` on React Router, etc) so the variant is shareable and reload-stable.
-- Keyboard: `←` and `→` arrow keys also cycle. Don't intercept arrow keys when an `<input>`, `<textarea>`, or `[contenteditable]` is focused.
-- Visually distinct from the page (e.g. high-contrast pill, subtle shadow) so it's obviously not part of the design being evaluated.
-- Hidden in production builds — gate on `process.env.NODE_ENV !== 'production'` or an equivalent check, so a stray prototype merge can't ship the bar to users.
+- 点击箭头更新 URL 搜索参数（使用框架自带的路由方法——Next.js 用 `router.replace`，React Router 用 `navigate` 等），确保变体可分享、刷新后状态不变。
+- 键盘支持：`←` 和 `→` 方向键也可切换。当 `<input>`、`<textarea>` 或 `[contenteditable]` 元素获焦时，不要拦截方向键。
+- 视觉上与页面区分开（比如高对比度药丸形状、轻微阴影），明确标识不属于待评估的设计内容。
+- 生产构建中隐藏——通过 `process.env.NODE_ENV !== 'production'` 或等效判断控制，避免误合并原型代码导致切换器上线。
 
-Put the switcher in a single shared component so both sub-shapes can reuse it. Locate it wherever shared UI lives in the project.
+将切换器封装为共享组件，两种子模式都可复用。放在项目共享 UI 的存放位置。
 
-### 5. Hand it over
+### 5. 交付原型
 
-Surface the URL (and the `?variant=` keys). The user will flip through whenever they get to it. The interesting feedback is usually **"I want the header from B with the sidebar from C"** — that's the actual design they want.
+提供完整 URL（含 `?variant=` 参数说明）。用户可随时切换查看。最有价值的反馈通常是**「我要 B 的页头加 C 的侧边栏」**——这才是用户真正想要的设计。
 
-### 6. Capture the answer and clean up
+### 6. 确认最终方案并清理
 
-Once a variant has won, write down which one and why (commit message, ADR, issue, or a `NOTES.md` next to the prototype if running AFK and the user hasn't responded yet). Then:
+确定胜出的变体后，记录选中原因（写入提交信息、ADR、issue，或原型旁的 `NOTES.md`，若用户暂时离线未回复）。然后：
 
-- **Sub-shape A** — delete the losing variants and the switcher; fold the winner into the existing page.
-- **Sub-shape B** — promote the winning variant to a real route, delete the throwaway route and the switcher.
+- **子模式 A** — 删除落选变体和切换器，将胜出变体合并到现有页面。
+- **子模式 B** — 将胜出变体升级为正式路由，删除临时路由和切换器。
 
-Don't leave variant components or the switcher lying around. They rot fast and confuse the next reader.
+不要遗留变体组件或切换器代码。这些代码会快速过时，干扰后续开发者。
 
-## Anti-patterns
+## 反模式
 
-- **Variants that differ only in colour or copy.** That's a tweak, not a prototype. Real variants disagree about structure.
-- **Sharing too much code between variants.** A shared `<Header>` is fine; a shared `<Layout>` defeats the point. Each variant should be free to throw out the layout.
-- **Wiring variants to real mutations.** Read-only prototypes are fine. If a variant needs to mutate, point it at a stub — the question is "what should this look like", not "does the backend work".
-- **Promoting the prototype directly to production.** The variant code was written under prototype constraints (no tests, minimal error handling). Rewrite it properly when you fold it in.
+- **仅颜色或文案不同的变体。** 这只是微调，不是原型。真正的变体要在结构上有差异。
+- **变体间共享过多代码。** 共享 `<Header>` 没问题，但共享 `<Layout>` 就失去了意义。每个变体都应该能自由调整布局。
+- **变体对接真实数据变更接口。** 只读原型完全够用。如果变体需要变更数据，对接桩服务即可——原型要解决的是「界面应该长什么样」，不是「后端是否正常工作」。
+- **直接将原型代码上线。** 变体代码是在原型约束下编写的（无测试、错误处理简陋）。合并到正式代码时需要重写。
 
 ---
 
-*This skill originates from Matt Pocock Skills, adapted for MySuperPowers.*
+*本技能源自 Matt Pocock Skills，为 MySuperPowers 进行了适配。*
