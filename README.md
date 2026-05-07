@@ -42,8 +42,8 @@ OpenCode 原生支持 Claude Code 的 `CLAUDE.md` 和 `.claude/skills/` 目录�
 
 ```json
 {
-  “plugin”: [
-  “mysuperpowers@git+https://github.com/jemsemleezi/mysuperpowers.git”
+  "plugin": [
+  "mysuperpowers@git+https://github.com/jemsemleezi/mysuperpowers.git"
   ]
 }
 ```
@@ -115,3 +115,14 @@ OpenCode 原生支持 Claude Code 的 `CLAUDE.md` 和 `.claude/skills/` 目录�
 ### Misc Skills
 保留但很少使用：
 - [using-git-worktrees](skills/misc/using-git-worktrees/SKILL.md)：为功能开发创建隔离的 git worktree。
+
+## 致谢 / Acknowledgments
+
+MySuperPowers 是以下两个开源项目的合并与衍生：
+
+| 项目 | 作者 | 地址 | 许可 |
+|------|------|------|------|
+| **Superpowers** | Jesse Vincent (obra) | https://github.com/obra/superpowers | MIT |
+| **Matt Pocock Skills** | Matt Pocock | https://github.com/mattpocock/skills | MIT |
+
+本项目采用了 MIT 开源许可（见 `LICENSE`），并在此致谢上述项目的原作者。
