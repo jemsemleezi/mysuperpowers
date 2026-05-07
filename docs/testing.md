@@ -2,6 +2,17 @@
 
 本文档描述如何测试 MySuperPowers 技能，特别是涉及子代理、工作流和复杂交互的集成测试。
 
+## 前置条件 / Requirements
+
+运行测试前确保以下均已就绪：
+
+- **Claude Code / OpenCode CLI** — 已安装且位于 `PATH` 中（`claude --version` 或 `opencode --version` 可用）
+- **MySuperPowers 插件** — 本地开发插件已启用（主 `README.md` 中的安装步骤已完成）
+- **运行目录** — 必须从 MySuperPowers 仓库**根目录**运行（技能只有在该目录下才能被正确发现和加载）
+- **Python 3** — 用于 `analyze-token-usage.py`（`python3 --version` 可用）
+- **Node.js**（可选） — 部分测试（如 brainstorm-server）需要 `ws` 包
+- **磁盘空间** — 集成测试会创建临时项目目录并产生会话 JSONL 文件（通常 <50MB）
+
 ## 概述
 
 测试技能需要运行真实的代理会话，并通过会话转录文本来验证行为。对于涉及 `subagent-driven-development`、`brainstorming`、`executing-plans` 等复杂技能，必须通过真实会话验证。

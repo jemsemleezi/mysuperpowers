@@ -84,6 +84,17 @@ integration_tests=(
     "test-requesting-code-review.sh"
 )
 
+# Test descriptions for --help
+test_names=$(cat <<'TESTS_EOF'
+Tests:
+  test-subagent-driven-development.sh  Test skill loading and requirements (~2 min)
+
+Integration Tests (use --integration):
+  test-subagent-driven-development-integration.sh  Full workflow execution (10-30 min)
+  test-requesting-code-review.sh                   Code review with planted bugs (~5 min)
+TESTS_EOF
+)
+
 # Add integration tests if requested
 if [ "$RUN_INTEGRATION" = true ]; then
     tests+=("${integration_tests[@]}")
