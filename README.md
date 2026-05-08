@@ -31,13 +31,21 @@ MySuperPowers 是一套为 AI 编码代理整合的技能系统，结合了 Supe
 ### Claude Code
 1. 将 `MySuperPowers/skills` 文件夹复制到你项目的 `.claude/skills/` 目录。
 2. 将 `MySuperPowers/CLAUDE.md` 复制到你项目根目录。
-3. （可选）如果你经常离线工作，可以把 `docs/using-superpowers.md` 复制到项目的 `docs/` 目录作为本地参考。
 
 ### OpenCode
 
-OpenCode 原生支持 Claude Code 的 `CLAUDE.md` 和 `.claude/skills/` 目录结构，因此集成非常顺畅。
+> **重要**: 当前 OpenCode 版本（包括 v1.14.40）存在已知限制：通过 plugin 注册的技能**不会**暴露 `skill` 函数工具给 agent（[superpowers#1492](https://github.com/obra/superpowers/issues/1492)）。因此**不能只靠插件安装**，必须执行下方的技能复制步骤。
 
-**选项 A: 插件安装（推荐）**
+#### 必做：复制技能到全局目录
+
+将整个 `skills/` 目录复制到 OpenCode 的全局技能扫描目录：
+
+```powershell
+Copy-Item -Recurse -Path "<path-to-mysuperpowers>\skills" -Destination "$env:USERPROFILE\.config\opencode\skills\mysuperpowers"
+```
+
+#### 可选：添加插件引用
+
 将以下内容添加到你项目的 `opencode.json`（或 `opencode.jsonc`）文件中：
 
 ```json
@@ -48,9 +56,7 @@ OpenCode 原生支持 Claude Code 的 `CLAUDE.md` 和 `.claude/skills/` 目录�
 }
 ```
 
-**选项 B: 手动复制技能**
-1. 将整个 `skills/` 目录复制到你项目根目录下的 `.claude/skills/` 文件夹中（OpenCode 会自动识别这里的技能）。
-2. 将 `CLAUDE.md` 和 `CONTEXT.md` 复制到你项目根目录。
+> 插件注册可以提供钩子（hooks）和消息转换（message transforms），但无法解决 `skill` tool 不可用的问题。技能复制是 **必做步骤**。
 
 **验证：**
 安装完成后，启动 OpenCode，并使用 `skill` 工具列出可用技能：
@@ -98,6 +104,7 @@ OpenCode 原生支持 Claude Code 的 `CLAUDE.md` 和 `.claude/skills/` 目录�
 - [to-prd](skills/engineering/to-prd/SKILL.md)：将功能需求转换为结构化的产品需求文档（PRD）。
 - [to-issues](skills/engineering/to-issues/SKILL.md)：把 PRD 拆解为可执行、可跟踪的问题。
 - [triage](skills/engineering/triage/SKILL.md)：对问题跟踪器中的问题进行优先级排序和分类。
+- [using-superpowers](skills/engineering/using-superpowers/SKILL.md)：MySuperPowers 核心方法论——Auto-pilot 模式、Manual-first 模式、安全边界与 The Flow。
 - [setup-project](skills/engineering/setup-project/SKILL.md)：使用标准工具和配置初始化新项目。
 - [prototype](skills/engineering/prototype/SKILL.md)：创建快速、可运行的原型来验证想法。
 - [verification-before-completion](skills/engineering/verification-before-completion/SKILL.md)：在宣称完成之前，用证据验证工作。

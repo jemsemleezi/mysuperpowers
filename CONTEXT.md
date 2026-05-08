@@ -1,4 +1,4 @@
-# MySuperPowers
+﻿# MySuperPowers
 
 面向 AI 编码代理的合并式技能系统，结合了 Superpowers（流程编排）和 Matt Pocock Skills（工程方法论）。
 
@@ -25,11 +25,11 @@ _避免使用_: command, plugin, tool
 
 **Harness**: 运行代理的 IDE/CLI 环境（Claude Code、Codex CLI、Cursor、OpenCode、Gemini CLI、GitHub Copilot CLI）。
 
-**Auto-pilot Mode**: 由“auto”、“automate”、“build this”或高层需求触发的全自动模式。代理会在没有用户介入的情况下端到端遵循 The Flow。详情见 `docs/using-superpowers.md`。
+**Auto-pilot Mode**: 由“auto”、“automate”、“build this”或高层需求触发的全自动模式。代理会在没有用户介入的情况下端到端遵循 The Flow。详见 `using-superpowers` 技能。
 
-**Manual-first Mode**: 由“I'll write it”、“guide me”、“help me learn”触发的学习/控制模式。代理扮演资深导师的角色 - 只建议技能，除非明确要求，否则不会写代码或启动子代理。详情见 `docs/using-superpowers.md`。
+**Manual-first Mode**: 由“I'll write it”、“guide me”、“help me learn”触发的学习/控制模式。代理扮演资深导师的角色 - 只建议技能，除非明确要求，否则不会写代码或启动子代理。详见 `using-superpowers` 技能。
 
-**Safety Boundaries**: 自动模式下用于防止不可逆操作的护栏 - 分支隔离（不向 main/master 写入）、禁止自动部署、破坏性操作需要人工确认、PR 和合并必须暂停等待人工审查。详情见 `docs/using-superpowers.md`。
+**Safety Boundaries**: 自动模式下用于防止不可逆操作的护栏 - 分支隔离（不向 main/master 写入）、禁止自动部署、破坏性操作需要人工确认、PR 和合并必须暂停等待人工审查。详见 `using-superpowers` 技能。
 
 ## 关系
 - 一个 **Skill** 只属于一个 **Bucket**

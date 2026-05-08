@@ -44,7 +44,7 @@ fi
 
 # Test 3: Check using-superpowers skill exists (critical for bootstrap)
 echo "Test 3: Checking using-superpowers skill (required for bootstrap)..."
-if [ -f "$MYSUPERPOWERS_SKILLS_DIR/using-superpowers/SKILL.md" ]; then
+if [ -f "$MYSUPERPOWERS_SKILLS_DIR/engineering/using-superpowers/SKILL.md" ]; then
     echo "  [PASS] using-superpowers skill exists"
 else
     echo "  [FAIL] using-superpowers skill not found (required for bootstrap)"

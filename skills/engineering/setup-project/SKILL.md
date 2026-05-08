@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # 设置 MySuperPowers
 
-> **⚠️ 目录结构强制要求：** 在初始化全栈项目时，此技能 **必须** 按照 `docs/using-superpowers.md` 中定义的标准布局创建项目（见"全栈项目约定"章节）：
+> **⚠️ 目录结构强制要求：** 在初始化全栈项目时，此技能 **必须** 按照 `using-superpowers` 技能中定义的标准布局创建项目（见"全栈项目约定"章节）：
 > ```
 > my-project/
 > ├── .opencode/          # OpenCode 专属配置

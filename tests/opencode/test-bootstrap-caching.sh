@@ -20,9 +20,9 @@ run_present_file_check() {
 
 run_missing_file_check() {
     if [ -f "$SCRIPT_DIR/test-bootstrap-caching.mjs" ]; then
-        mv "$MYSUPERPOWERS_SKILLS_DIR/using-superpowers/SKILL.md" "$TEST_HOME/using-superpowers.SKILL.md.bak"
+        mv "$MYSUPERPOWERS_SKILLS_DIR/engineering/using-superpowers/SKILL.md" "$TEST_HOME/using-superpowers.SKILL.md.bak"
         node "$SCRIPT_DIR/test-bootstrap-caching.mjs" "$MYSUPERPOWERS_PLUGIN_FILE" missing
-        mv "$TEST_HOME/using-superpowers.SKILL.md.bak" "$MYSUPERPOWERS_SKILLS_DIR/using-superpowers/SKILL.md"
+        mv "$TEST_HOME/using-superpowers.SKILL.md.bak" "$MYSUPERPOWERS_SKILLS_DIR/engineering/using-superpowers/SKILL.md"
     else
         echo "  [SKIP] test-bootstrap-caching.mjs not found"
     fi

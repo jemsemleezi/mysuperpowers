@@ -1,4 +1,10 @@
+---
+name: using-superpowers
+description: MySuperPowers 核心方法论——Auto-pilot 模式、Manual-first 模式、安全边界、The Flow 和全栈项目约定。被 CLAUDE.md 和 CONTEXT.md 引用为基础框架规则。
+---
+
 # 使用 MySuperPowers
+
 MySuperPowers 是一套为你的 AI 编码代理准备的完整软件开发方法论。它融合了两大系统：
 - **Superpowers（作者 Obra）**：一个面向编码代理的、基于插件的技能系统，具备流程编排、钩子（hooks）和多平台支持能力。
 - **Matt Pocock Skills**：一套工程方法论技能，涵盖领域语言、PRD/问题工作流、TDD、调试等。

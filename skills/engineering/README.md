@@ -13,6 +13,7 @@ AI 编码代理的日常开发工作技能。
 - [to-prd](to-prd/SKILL.md)：将功能需求转换为结构化的产品需求文档（PRD）。
 - [to-issues](to-issues/SKILL.md)：将 PRD 拆解为可执行、可跟踪的问题（issues）。
 - [triage](triage/SKILL.md)：对问题跟踪器中的问题进行优先级排序和分类。
+- [using-superpowers](using-superpowers/SKILL.md)：MySuperPowers 核心方法论——Auto-pilot 模式、Manual-first 模式、安全边界与 The Flow。
 - [setup-project](setup-project/SKILL.md)：使用标准工具链和配置初始化新项目。
 - [prototype](prototype/SKILL.md)：创建快速、可运行的原型以验证想法。
 - [verification-before-completion](verification-before-completion/SKILL.md)：在宣称完成之前，用证据验证工作成果。
