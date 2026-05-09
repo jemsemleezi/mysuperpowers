@@ -2,7 +2,7 @@
 
 ## 安装
 
-### 步骤 1：将技能复制到 OpenCode 全局技能目录（必需）
+### 步骤 1：将技能复制到 OpenCode 全局技能目录
 
 当前 OpenCode 版本（含 v1.14.40）**无法仅通过插件注册向代理暴露 `skill` 功能工具**（[superpowers#1492](https://github.com/obra/superpowers/issues/1492)）。技能必须放置在全局技能目录中：
 
@@ -13,7 +13,7 @@ Copy-Item -Recurse -Path "<path-to-mysuperpowers>\skills" -Destination "$env:USE
 
 这样所有技能即可被 OpenCode 的原生技能扫描器发现。
 
-### 步骤 2：添加插件引用（可选）
+### 步骤 2：添加插件引用
 
 ```json
 {

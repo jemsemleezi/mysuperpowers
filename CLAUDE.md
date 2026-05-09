@@ -1,8 +1,4 @@
-﻿## 平台入口
-- Claude Code / OpenCode / Cursor / Copilot: 使用 `CLAUDE.md`（如果存在 `AGENTS.md`，也一并使用）。
-- Gemini CLI: 使用 `GEMINI.md`（见 `gemini-extension.json`）。
-
-⚠️ 主要指令：模式检测
+﻿## 主要指令：模式检测
 在开始任何任务之前，先根据用户的提示判断其意图模式：
 - 如果用户说“auto”、“automate”、“build this”，或者给出高层需求 -> 进入 Auto-pilot Mode。加载 `using-superpowers` 技能并严格遵循。你可以使用 `executing-plans` 和 `subagent-driven-development`。
 - **MANDATORY**：`verification-before-completion` 是 The Flow 不可跳过的最后一道关卡。任何实现工作完成后，你都必须运行验证命令并提供证据，然后才能宣称完成或进入代码审查。

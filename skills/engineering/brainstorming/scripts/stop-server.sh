@@ -6,6 +6,7 @@
 # under /tmp (ephemeral). Persistent directories (.superpowers/) are
 # kept so mockups can be reviewed later.
 
+# Read session directory path from the first command-line argument
 SESSION_DIR="$1"
 
 if [[ -z "$SESSION_DIR" ]]; then
@@ -13,6 +14,7 @@ if [[ -z "$SESSION_DIR" ]]; then
   exit 1
 fi
 
+# Build paths for state directory and server PID file
 STATE_DIR="${SESSION_DIR}/state"
 PID_FILE="${STATE_DIR}/server.pid"
 
@@ -50,7 +52,9 @@ if [[ -f "$PID_FILE" ]]; then
     rm -rf "$SESSION_DIR"
   fi
 
+  # Report successful shutdown to the caller
   echo '{"status": "stopped"}'
 else
+  # No PID file found — the server was not running or was already cleaned up
   echo '{"status": "not_running"}'
 fi

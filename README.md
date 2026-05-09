@@ -36,7 +36,7 @@ MySuperPowers 是一套为 AI 编码代理整合的技能系统，结合了 Supe
 
 > **重要**: 当前 OpenCode 版本（包括 v1.14.40）存在已知限制：通过 plugin 注册的技能**不会**暴露 `skill` 函数工具给 agent（[superpowers#1492](https://github.com/obra/superpowers/issues/1492)）。因此**不能只靠插件安装**，必须执行下方的技能复制步骤。
 
-#### 必做：复制技能到全局目录
+#### 步骤 1：将技能复制到 OpenCode 全局技能目录
 
 将整个 `skills/` 目录复制到 OpenCode 的全局技能扫描目录：
 
@@ -44,7 +44,7 @@ MySuperPowers 是一套为 AI 编码代理整合的技能系统，结合了 Supe
 Copy-Item -Recurse -Path "<path-to-mysuperpowers>\skills" -Destination "$env:USERPROFILE\.config\opencode\skills\mysuperpowers"
 ```
 
-#### 可选：添加插件引用
+#### 步骤 2：添加插件引用
 
 将以下内容添加到你项目的 `opencode.json`（或 `opencode.jsonc`）文件中：
 
