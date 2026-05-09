@@ -1,1 +1,0 @@
-I know what subagent-driven-development means. I have a plan at docs/mysuperpowers/plans/my-plan.md. Execute it using subagent-driven-development now.

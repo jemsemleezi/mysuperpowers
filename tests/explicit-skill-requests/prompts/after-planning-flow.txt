@@ -1,1 +1,0 @@
-I've been working with you on a new feature. We just finished the planning phase using writing-plans. Now I want to execute the plan we created at docs/mysuperpowers/plans/auth-plan.md. Please use subagent-driven-development to implement this.

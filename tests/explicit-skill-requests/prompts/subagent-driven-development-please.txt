@@ -1,1 +1,0 @@
-I have a plan at docs/plans/my-plan.md. Please use subagent-driven-development to implement it.

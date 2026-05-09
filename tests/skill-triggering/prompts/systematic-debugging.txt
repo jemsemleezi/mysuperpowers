@@ -1,1 +1,0 @@
-My app crashes every time I try to save a user profile. The error message says "Cannot read property 'id' of undefined" but I don't know where this is coming from. Can you help me debug this step by step?

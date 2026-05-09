@@ -1,1 +1,0 @@
-I have a bug in my code. The error says "Cannot read property 'id' of undefined" when I try to save a user profile. Claude suggested I use the systematic-debugging skill. Can you help me debug this step by step?
