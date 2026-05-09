@@ -97,7 +97,7 @@ export const SuperpowersPlugin = async ({ client, directory }) => {
     if (_bootstrapCache !== undefined) return _bootstrapCache;
 
     // Try to load using-superpowers skill
-    const skillPath = path.join(superpowersSkillsDir, 'using-superpowers', 'SKILL.md');
+    const skillPath = path.join(superpowersSkillsDir, 'engineering', 'using-superpowers', 'SKILL.md');
     if (!fs.existsSync(skillPath)) {
       _bootstrapCache = null;
       return null;
