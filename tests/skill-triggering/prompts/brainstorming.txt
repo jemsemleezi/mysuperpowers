@@ -1,0 +1,1 @@
+I need to build a new feature for my app that allows users to upload and share images with their friends. Can you help me think through what this should look like?
