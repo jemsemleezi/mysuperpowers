@@ -13,6 +13,13 @@ PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 # Read the using-superpowers skill content from the skills/ directory
 using_superpowers_content=$(cat "${PLUGIN_ROOT}/skills/engineering/using-superpowers/SKILL.md" 2>&1 || echo "Error reading using-superpowers skill")
 
+# Check if legacy skills directory exists and warn about migration
+warning_message=""
+legacy_skills_dir="${HOME}/.config/superpowers/skills"
+if [ -d "$legacy_skills_dir" ]; then
+  warning_message="\n\n<important-reminder>IN YOUR FIRST REPLY AFTER SEEING THIS MESSAGE YOU MUST TELL THE USER:⚠️ **WARNING:** Superpowers now uses Claude Code's skills system. Custom skills in ~/.config/superpowers/skills will not be read. Move custom skills to ~/.claude/skills instead. To make this message go away, remove ~/.config/superpowers/skills</important-reminder>"
+fi
+
 # escape_for_json — Escape a string for safe embedding as a JSON string value
 # Uses bash parameter substitution (${s//old/new}), which is a single C-level
 # pass per substitution — orders of magnitude faster than character loops
@@ -27,10 +34,10 @@ escape_for_json() {
 }  # End escape_for_json
 
 # Escape skill content and warning for JSON embedding
-using_mysuperpowers_escaped=$(escape_for_json "$using_superpowers_content")
+using_superpowers_escaped=$(escape_for_json "$using_superpowers_content")
 warning_escaped=$(escape_for_json "$warning_message")
 # Build the final context string: wraps escaped skill content + warning in XML tags
-session_context="<EXTREMELY_IMPORTANT>\nYou have mysuperpowers.\n\n**Below is the full content of your 'mysuperpowers:using-superpowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_mysuperpowers_escaped}\n\n${warning_escaped}\n</EXTREMELY_IMPORTANT>"
+session_context="<EXTREMELY_IMPORTANT>\nYou have mysuperpowers.\n\n**Below is the full content of your 'mysuperpowers:using-superpowers' skill - your introduction to using skills. For all other skills, use the 'Skill' tool:**\n\n${using_superpowers_escaped}\n\n${warning_escaped}\n</EXTREMELY_IMPORTANT>"
 
 # Output context injection as JSON.
 # Cursor hooks expect additional_context (snake_case).
