@@ -11,7 +11,7 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 PLUGIN_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
 # Read the using-superpowers skill content from the skills/ directory
-using_superpowers_content=$(cat "${PLUGIN_ROOT}/skills/skills/engineering/using-superpowers/SKILL.md" 2>&1 || echo "Error reading using-superpowers skill")
+using_superpowers_content=$(cat "${PLUGIN_ROOT}/skills/engineering/using-superpowers/SKILL.md" 2>&1 || echo "Error reading using-superpowers skill")
 
 # escape_for_json — Escape a string for safe embedding as a JSON string value
 # Uses bash parameter substitution (${s//old/new}), which is a single C-level
