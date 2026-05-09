@@ -1,1 +1,0 @@
-Add user authentication with JWT tokens. Make sure to use the executing-plans skill to create a proper implementation plan first.

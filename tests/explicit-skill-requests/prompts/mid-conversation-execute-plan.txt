@@ -1,1 +1,0 @@
-We've been discussing my project. I have a plan ready at docs/plans/feature-x.md. Use subagent-driven-development to execute it.

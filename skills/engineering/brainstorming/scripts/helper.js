@@ -1,16 +1,20 @@
+// Self-executing function to encapsulate brainstorming client-side helpers
 (function() {
   const WS_URL = 'ws://' + window.location.host;
   let ws = null;
   let eventQueue = [];
 
+  // connect — Establish WebSocket connection and wire up event handlers
   function connect() {
     ws = new WebSocket(WS_URL);
 
+    // Connection established — flush any queued events, then clear the queue
     ws.onopen = () => {
       eventQueue.forEach(e => ws.send(JSON.stringify(e)));
       eventQueue = [];
     };
 
+    // Handle incoming messages: "reload" type triggers a full page refresh
     ws.onmessage = (msg) => {
       const data = JSON.parse(msg.data);
       if (data.type === 'reload') {
@@ -18,11 +22,13 @@
       }
     };
 
+    // Connection lost — attempt to reconnect after a 1-second delay
     ws.onclose = () => {
       setTimeout(connect, 1000);
     };
   }
 
+  // sendEvent — Send an event to the server, or queue it if connection is not ready yet
   function sendEvent(event) {
     event.timestamp = Date.now();
     if (ws && ws.readyState === WebSocket.OPEN) {
@@ -32,7 +38,7 @@
     }
   }
 
-  // Capture clicks on choice elements
+  // Capture clicks on data-choice elements, send event to server, update indicator bar
   document.addEventListener('click', (e) => {
     const target = e.target.closest('[data-choice]');
     if (!target) return;
@@ -61,7 +67,7 @@
     }, 0);
   });
 
-  // Frame UI: selection tracking
+  // Frame UI: selection tracking — manages visual selection state on option cards
   window.selectedChoice = null;
 
   window.toggleSelect = function(el) {
@@ -78,11 +84,12 @@
     window.selectedChoice = el.dataset.choice;
   };
 
-  // Expose API for explicit use
+  // Expose public API for programmatic use via window.brainstorm
   window.brainstorm = {
     send: sendEvent,
     choice: (value, metadata = {}) => sendEvent({ type: 'choice', value, ...metadata })
   };
 
+  // Initialize WebSocket connection immediately on page load
   connect();
 })();

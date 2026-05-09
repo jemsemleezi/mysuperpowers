@@ -14,6 +14,7 @@
 #   --foreground          Run server in the current terminal (no backgrounding).
 #   --background          Force background mode (overrides Codex auto-foreground).
 
+# Resolve the directory where this script lives (for referencing sibling files like server.cjs)
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 
 # Parse arguments
@@ -51,6 +52,7 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
+# Derive display hostname from bind address if URL host was not explicitly set
 if [[ -z "$URL_HOST" ]]; then
   if [[ "$BIND_HOST" == "127.0.0.1" || "$BIND_HOST" == "localhost" ]]; then
     URL_HOST="localhost"
@@ -75,6 +77,7 @@ if [[ "$FOREGROUND" != "true" && "$FORCE_BACKGROUND" != "true" ]]; then
 fi
 
 # Generate unique session directory
+# Create a unique session identifier using PID and current timestamp
 SESSION_ID="$$-$(date +%s)"
 
 if [[ -n "$PROJECT_DIR" ]]; then
@@ -83,6 +86,7 @@ else
   SESSION_DIR="/tmp/brainstorm-${SESSION_ID}"
 fi
 
+# Define runtime state file paths within the session directory
 STATE_DIR="${SESSION_DIR}/state"
 PID_FILE="${STATE_DIR}/server.pid"
 LOG_FILE="${STATE_DIR}/server.log"
@@ -90,13 +94,14 @@ LOG_FILE="${STATE_DIR}/server.log"
 # Create fresh session directory with content and state peers
 mkdir -p "${SESSION_DIR}/content" "$STATE_DIR"
 
-# Kill any existing server
+# Terminate any previously running server before starting a new instance
 if [[ -f "$PID_FILE" ]]; then
   old_pid=$(cat "$PID_FILE")
   kill "$old_pid" 2>/dev/null
   rm -f "$PID_FILE"
 fi
 
+# Switch to script directory before launching the Node server
 cd "$SCRIPT_DIR"
 
 # Resolve the harness PID (grandparent of this script).
@@ -109,19 +114,21 @@ fi
 
 # Foreground mode for environments that reap detached/background processes.
 if [[ "$FOREGROUND" == "true" ]]; then
+  # Write own PID to file and run server in current foreground process
   echo "$$" > "$PID_FILE"
   env BRAINSTORM_DIR="$SESSION_DIR" BRAINSTORM_HOST="$BIND_HOST" BRAINSTORM_URL_HOST="$URL_HOST" BRAINSTORM_OWNER_PID="$OWNER_PID" node server.cjs
   exit $?
 fi
 
-# Start server, capturing output to log file
-# Use nohup to survive shell exit; disown to remove from job table
+# Start server in background, capturing all output to log file
+# Use nohup to survive shell exit; disown to remove from job table so it persists
 nohup env BRAINSTORM_DIR="$SESSION_DIR" BRAINSTORM_HOST="$BIND_HOST" BRAINSTORM_URL_HOST="$URL_HOST" BRAINSTORM_OWNER_PID="$OWNER_PID" node server.cjs > "$LOG_FILE" 2>&1 &
 SERVER_PID=$!
 disown "$SERVER_PID" 2>/dev/null
+# Record PID to file so stop-server.sh can terminate this instance later
 echo "$SERVER_PID" > "$PID_FILE"
 
-# Wait for server-started message (check log file)
+# Poll the log file for the "server-started" ready signal (up to ~5s timeout)
 for i in {1..50}; do
   if grep -q "server-started" "$LOG_FILE" 2>/dev/null; then
     # Verify server is still alive after a short window (catches process reapers)
@@ -143,6 +150,6 @@ for i in {1..50}; do
   sleep 0.1
 done
 
-# Timeout - server didn't start
+# Timeout — server did not emit the ready signal within the expected window
 echo '{"error": "Server failed to start within 5 seconds"}'
 exit 1

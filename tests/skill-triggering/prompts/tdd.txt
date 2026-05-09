@@ -1,1 +1,0 @@
-I found a bug in my code where the user login fails when the password contains special characters. I need to fix this and make sure it doesn't happen again.
